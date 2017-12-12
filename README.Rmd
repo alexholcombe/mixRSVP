@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 ```
 # mixRSVP
 
-The goal of mixRSVP is to ...
+The goal of mixRSVP is to mixture model errors in reports of an item from an array or a stream, presently using a mixture model of uniform and Gaussian distributions.
 
 ## Example
 
@@ -23,3 +23,7 @@ This is a basic example which shows you how to solve a common problem:
 ```{r example}
 ## basic example code
 ```
+
+## History
+
+Patrick Goodbourn programmed mixture modeling RSVP serial position errors in MATLAB. [Certifiedwaif](https://github.com/certifiedwaif/) did initial [port](https://github.com/certifiedwaif/AttentionalBlink) it to R, and then Alex [functionfied and improved things](https://github.com/alexholcombe/MixtureModelRSVP) before making it into this package.

@@ -10,3 +10,5 @@ ByteCompile: true
 Imports: 
     dplyr,
     ggplot2
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.0.1

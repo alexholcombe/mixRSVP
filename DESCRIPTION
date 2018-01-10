@@ -9,6 +9,8 @@ LazyData: true
 ByteCompile: true
 Imports: 
     dplyr,
-    ggplot2
+    ggplot2,
+    optimx,
+    signal
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1

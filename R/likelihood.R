@@ -18,6 +18,18 @@
 #   return(vq)
 # }
 
+#' @importFrom stats dnorm pnorm runif
+#'
+NULL
+
+#' Calculate area under a particular domain of a Gaussian distribution
+#'
+#'
+#' @param binStart x value of bin start
+#' @param binWidth bin width
+#' @param latency mean of Gaussian
+#' @param precision sigma of Gaussian
+#' @return Area under the bin for a Gaussian distribution with the parameters mean=latency, sigma=precision
 areaUnderGaussianBin<- function(binStart,binWidth,latency,precision) {
   #Calculate area under the unit curve for that bin
   area <- pnorm(binStart+binWidth,latency,precision) - pnorm(binStart,latency,precision)

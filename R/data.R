@@ -6,8 +6,19 @@
 #' @format A data frame with 1200 rows and 23 variables:
 #' \describe{
 #'   \item{target}{which target, the one in the left stream (1) or the right stream (2), this row pertains to}
-#'   \item{carat}{weight of the diamond, in carats}
+#'   \item{SPE}{the serial position error}
+#'   \item{allLetterOrientations}{}
+#'   \item{allRTs}{}
+#'   \item{allResponseOrientations}{}
+#'   \item{allTargetOrientations}{}
+#'   \item{condition}{}
+#'   \item{letterSeq}{}
+#'   \item{resp}{}
+#'   \item{respSP}{}
+#'   \item{subject}{}
+#'   \item{targetSP}{}
+#'   \item{trial}{}
 #'   ...
 #' }
-#' @source \url{http://www.diamondse.info/}
+#' @source Alex's GoogleDrive folder, "/Users/alexh/Google\ Drive/Backwards\ paper/secondPaper/E2/Data/Raw", first 3 Ss run.
 "P2E2pilot"

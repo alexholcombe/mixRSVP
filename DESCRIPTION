@@ -7,10 +7,12 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 ByteCompile: true
+Depends: R (>= 2.10)
 Imports: 
     dplyr,
     ggplot2,
     optimx,
-    signal
+    signal,
+    stats
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1

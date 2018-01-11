@@ -8,14 +8,7 @@
 #' @export
 #'
 #' @examples
-#'  \dontrun{
-#'    # Copied from ?ggtheme
-#'    p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
-#'      colour = factor(gear))) + facet_wrap(~ am)
-#'    p
-#'    p + theme_apa()
-#'  }
-
+#' parametersGuess(parameterBounds()$lower, parameterBounds()$upper)
 parametersGuess<- function( lowerBounds, upperBounds ) {
   guess<- rep(0,3)
   for (i in 1:length(guess)) {
@@ -31,6 +24,7 @@ parametersGuess<- function( lowerBounds, upperBounds ) {
 #' prevent over-fitting to blips in the distributions. These
 #' values are about right in most cases, but might need tweaking if
 #' e.g. you were analysing data with an unusually high or low item rate.
+#' @export
 parameterBounds<- function() {
   muBound <- 4   #will only consider -4 to +4 for mu
   sigmaBound <- 4 #will only consider 0 to 4 for sigma

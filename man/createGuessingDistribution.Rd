@@ -23,4 +23,5 @@ Create guessing distribution
 }
 \examples{
 createGuessingDistribution(-12,12,c(10,10,11,11,12,12,13,13),22)
+
 }

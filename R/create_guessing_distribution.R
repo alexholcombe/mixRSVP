@@ -7,6 +7,8 @@
 #' @return The guessing distribution, typically pseudo-uniform (see Goodbourn & Holcombe, 2015).
 #' @examples
 #' createGuessingDistribution(-12,12,c(10,10,11,11,12,12,13,13),22)
+#'
+#' @export
 createGuessingDistribution <- function(minSPE,maxSPE,targetSP,numItemsInStream) {
   # Generate the 'pseudo-uniform' distribution, which is the expected distribution of errors if a random guess was
   # provided on every trial. This isn't an actual uniform distribution because the most extreme errors are only
@@ -21,8 +23,8 @@ createGuessingDistribution <- function(minSPE,maxSPE,targetSP,numItemsInStream) 
   maxTargetSP <- max(targetSP)
   minSPEthisData<- 1 - max(targetSP)
   maxSPEthisData<- numItemsInStream - min(targetSP)
-  if (maxSPEthisData > maxSPE) stop(cat("maxSPE must be at least",maxTargetSP,"based on the values you passed me"))
-  if (minSPEthisData > minSPE) stop(cat("minSPE must be no greater than",minTargetSP,"based on the values you passed me"))
+  if (maxSPEthisData > maxSPE) stop(cat("maxSPE must be at least",maxSPEthisData,"based on the values you passed me"))
+  if (minSPEthisData > minSPE) stop(cat("minSPE must be no greater than",minSPEthisData,"based on the values you passed me"))
 
   #For each targetSP, determine all possible SPEs and aggregate across all targetSPs to generate the guessing distribution
   xDomain<- minSPE:maxSPE

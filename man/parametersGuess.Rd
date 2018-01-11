@@ -18,11 +18,5 @@ Generate guess (random starting values) for each parameter.
 Simply generate random numbers between the corresponding lower and upper bounds, return it in guess
 }
 \examples{
- \dontrun{
-   # Copied from ?ggtheme
-   p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
-     colour = factor(gear))) + facet_wrap(~ am)
-   p
-   p + theme_apa()
- }
+parametersGuess(parameterBounds()$lower, parameterBounds()$upper)
 }

@@ -31,9 +31,10 @@ analyzeOneCondition<- function(df, numItemsInStream, paramBounds, nReplicates=3)
     startingParams<- parametersGuess( paramBounds$lower, paramBounds$upper )
     fit<- fitModel(SPE, minSPE, maxSPE, pseudoUniform, startingParams, paramBounds)
     fit<- fit$content
+    fitMetric<- fit$value
     warns<- fit$warnings
     #print(fit)
-    return( data.frame(efficay=fit[1], latency=fit[2], precision=fit[3], val=fit$value, warnings=warns) )
+    return( list(efficacy=fit[1], latency=fit[2], precision=fit[3], val=fitMetric, warnings=warns) )
   }
 
   for (n in 1:nReplicates) { #fit the model many times (with different starting parameters)

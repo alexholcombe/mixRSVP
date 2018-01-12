@@ -2,6 +2,7 @@
 
 export(analyzeOneCondition)
 export(analyzeOneConditionDF)
+export(calc_curves_dataframes)
 export(createGuessingDistribution)
 export(parameterBounds)
 export(parametersGuess)

@@ -7,6 +7,9 @@
 plot_hist_with_fit(df, minSPE, maxSPE, targetSP, numItemsInStream,
   plotContinuousGaussian, annotateIt)
 }
+\arguments{
+\item{annotateIt}{Add text to the plot indicating fit efficacy, latency, precision, and negative log likelihood}
+}
 \description{
 Plot histogram with fitted curve
 }

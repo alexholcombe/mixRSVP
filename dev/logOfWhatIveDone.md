@@ -14,3 +14,13 @@ Fixed this by adding the following to the R files so roxygen will do the right t
 NULL
 
 * Did use_testthat()
+
+> use_vignette('hist_with_fit')
+✔ Adding 'knitr' to Suggests field in DESCRIPTION
+✔ Setting VignetteBuilder field in DESCRIPTION to 'knitr'
+✔ Adding 'rmarkdown' to Suggests field in DESCRIPTION
+✔ Creating 'vignettes/'
+✔ Adding '*.html', '*.R' to 'vignettes/.gitignore'
+✔ Adding 'inst/doc' to './.gitignore'
+✔ Creating 'vignettes/hist_with_fit.Rmd'
+● Modify 'vignettes/hist_with_fit.Rmd'

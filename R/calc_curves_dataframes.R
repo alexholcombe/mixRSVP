@@ -1,7 +1,17 @@
-
-#To be used with ggplot. Idea is to split dataframe into conditions,
-# send it to calc_curves_dataframes to fit data if not already fit but definitely
-# calculate the curves.
+#' Plot histogram with fitted curve
+#'
+#' To be used with ggplot. Idea is to split dataframe into conditions,
+#' send it to calc_curves_dataframes to fit data if not already fit and either way
+#' calculate the curves.
+#'
+#' @param df the data as a dataframe. Must contain SPE and targetSP
+#'
+#' @export
+#'
+#' @examples
+#' df <-  subset(P2E2pilot,subject=="CB" & target==1 & condition==1)
+#' calc_curves_dataframes(df, -11, 11, 16)
+#'
 
 calc_curves_dataframes<- function(df,minSPE,maxSPE,numItemsInStream) {
   #Calculate dataframes containing the fitted curve, so can plot data and curves at same time

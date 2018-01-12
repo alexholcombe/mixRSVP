@@ -12,3 +12,5 @@ Fixed this by adding the following to the R files so roxygen will do the right t
 #' @importFrom stats dnorm pnorm runif
 #'
 NULL
+
+* Did use_testthat()

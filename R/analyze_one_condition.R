@@ -6,7 +6,8 @@
 #' @param nReplicates How many times to fit the model (with different random starting points within paramBounds
 #' @return efficay, latency, precision, val (negative log likelihood), and warnings (currently disabled, don't know why)
 #' @examples
-#' analyzeOneCondition(subset(P2E2pilot,subject=="CB" & target==1 & condition==1),16,parameterBounds(),1)
+#' df <-  subset(P2E2pilot,subject=="CB" & target==1 & condition==1)
+#' analyzeOneCondition(df, 16, parameterBounds(), 1)
 #'
 #' @export
 analyzeOneCondition<- function(df, numItemsInStream, paramBounds, nReplicates=3) {
@@ -33,8 +34,8 @@ analyzeOneCondition<- function(df, numItemsInStream, paramBounds, nReplicates=3)
     fit<- fit$content
     fitMetric<- fit$value
     warns<- fit$warnings
-    #print(fit)
-    return( list(efficacy=fit[1], latency=fit[2], precision=fit[3], val=fitMetric, warnings=warns) )
+    fitNoNames<-as.numeric(fit) #Otherwise p1, p2, p3 names preserved, which is confusing
+    return( list(efficacy=fitNoNames[1], latency=fitNoNames[2], precision=fitNoNames[3], val=fitMetric, warnings=warns) )
   }
 
   for (n in 1:nReplicates) { #fit the model many times (with different starting parameters)

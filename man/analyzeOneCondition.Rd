@@ -22,6 +22,6 @@ efficay, latency, precision, val (negative log likelihood), and warnings (curren
 Analyze one condition
 }
 \examples{
-analyzeOneCondition(subset(P2E2pilot,subject=="CB" & target==1 & condition==1),16,parameterBounds(),1)
+analyzeOneCondition( subset(P2E2pilot,subject=="CB" & target==1 & condition==1), 16, parameterBounds(), 1)
 
 }

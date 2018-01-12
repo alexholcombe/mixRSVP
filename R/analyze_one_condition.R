@@ -27,7 +27,7 @@ analyzeOneCondition<- function(df, numItemsInStream, paramBounds, nReplicates=3)
   fitMaxFunEvals <- 10^4# Maximum number of model evaluations
 
   #Use RT to check which is left target and which is right target
-  fitModelDF <- function( SPE, minSPE, maxSPE ) {
+  myFit <- function( SPE, minSPE, maxSPE ) {
     #Calculate parameter guess
     startingParams<- parametersGuess( paramBounds$lower, paramBounds$upper )
     fit<- fitModel(SPE, minSPE, maxSPE, pseudoUniform, startingParams, paramBounds)
@@ -40,7 +40,7 @@ analyzeOneCondition<- function(df, numItemsInStream, paramBounds, nReplicates=3)
 
   for (n in 1:nReplicates) { #fit the model many times (with different starting parameters)
 
-    paramsPlusNegLogLikelihood<- fitModelDF( df$SPE, minSPE, maxSPE )
+    paramsPlusNegLogLikelihood<- myFit( df$SPE, minSPE, maxSPE )
     #print(paramsPlusNegLogLikelihood)
     #Save the best estimate
     if (n==1) {
@@ -54,5 +54,24 @@ analyzeOneCondition<- function(df, numItemsInStream, paramBounds, nReplicates=3)
   return( bestEstimate )
 }
 
-
+#' Analyze one condition, and return estimates as dataframe so suitable for use in dplyr pipelines
+#'
+#' @param df A dataframe that must have fields targetSP and SPE
+#' @param numItemsInStream Number of items in the stream (assumed to be the same for all trials)
+#' @param paramBounds With fields lower and upper, each of length two indicating min and max val for efficacy,latency,precision
+#' @param nReplicates How many times to fit the model (with different random starting points within paramBounds
+#' @return efficay, latency, precision, val (negative log likelihood), and warnings (currently disabled, don't know why)
+#' @examples
+#' df <-  subset(P2E2pilot,subject=="CB" & target==1 & condition==1)
+#' analyzeOneConditionDF(df, 16, parameterBounds(), 1)
+#'
+#' @export
+analyzeOneConditionDF<- function(df, numItemsInStream, paramBounds, nReplicates=3) {
+  fitList<- analyzeOneCondition(df, numItemsInStream, paramBounds, nReplicates=3)
+  #to make into dataframe, will take only the first warning
+  fitList$warnings <- fitList$warnings[1]
+  asDataFrame<- data.frame(fitList)
+  #asDataFrame<- data.frame(efficay=fitList[1], latency=fitList[2], precision=fit[3], val=fit$value, warnings="None")
+  return( asDataFrame  )
+}
 

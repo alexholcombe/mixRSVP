@@ -1,4 +1,4 @@
-context("test-analyzeonecondition.R")
+context("test-analyzeOneCondition.R")
 
 #To testthat, run test_file("mixtureModeling/tests/test_analyzeOneCondition.R")
 library(dplyr)

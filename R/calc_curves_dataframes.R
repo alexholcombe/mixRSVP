@@ -17,7 +17,7 @@ calc_curves_dataframes<- function(df,minSPE,maxSPE,numItemsInStream) {
     }
   } else {
     estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
-    efficacy<-estimates$p1; latency<-estimates$p2; precision<-estimates$p3
+    efficacy<-estimates$efficacy; latency<-estimates$latency; precision<-estimates$precision
     val<- estimates$val
     valAvailable<-TRUE
   }

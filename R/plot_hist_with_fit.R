@@ -1,9 +1,22 @@
 
-
-plotHistWithFit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,plotContinuousGaussian,annotateIt) {
+#' Plot histogram with fitted curve
+#'
+#' @import ggplot2
+#'
+#' @param annotateIt Add text to the plot indicating fit efficacy, latency, precision, and negative log likelihood
+#'
+#' @export
+#'
+#' @examples
+#'  \dontrun{
+#' df <-  subset(P2E2pilot,subject=="CB" & target==1 & condition==1)
+#' plot_hist_with_fit(df, -11, 11, df$targetSP, 16, TRUE, TRUE)
+#'  }
+#'
+plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,plotContinuousGaussian,annotateIt) {
   #targetSP is needed to construct empirical guessing distribution
   #calculate curves (predicted heights of bins for each component and combination of components
-  curveDfs<- calcCurvesDataframes(df,minSPE,maxSPE,numItemsInStream) #this also does the parameter estimation
+  curveDfs<- calc_curves_dataframes(df,minSPE,maxSPE,numItemsInStream) #this also does the parameter estimation
 
   if (plotContinuousGaussian) {
     #Calculate continuous fitted Gaussian, not discrete version.
@@ -14,7 +27,7 @@ plotHistWithFit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,plotContin
   }
 
   #plot data
-  g=ggplot(df, aes(x=SPE)) + theme_apa()
+  g= ggplot(df, aes(x=SPE)) + theme_apa()
   #plot data
   g<-g+geom_histogram(binwidth=1) + xlim(minSPE,maxSPE)
   if (plotContinuousGaussian) {

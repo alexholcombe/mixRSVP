@@ -14,7 +14,8 @@ knitr::opts_chunk$set(
 ```
 # mixRSVP
 
-The goal of mixRSVP is to mixture model errors in reports of an item from an array or a stream, presently using a mixture model of uniform and Gaussian distributions.
+The goal of mixRSVP is to mixture model temporal errors in reports of an item from an array or a stream, presently using a mixture model of uniform and Gaussian distributions.
+[Here](https://alexholcombe.wordpress.com/2015/04/05/reporting-items-from-a-stream-and-mixture-modeling-to-reveal-buffering-and-a-bottleneck/) is an explanation of what the hell that means.
 
 ## Example
 

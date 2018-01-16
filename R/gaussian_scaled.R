@@ -15,6 +15,16 @@ areaOfGaussianBin<- function(binStart,binWidth,latency,precision) {
   return (area)
 }
 
+#' Calculate the mixture model's Gaussian, scaled to the number of datapoints in the data
+#'
+#' Used in plot_hist_with_fit etc.
+#'#'
+#' @export
+#'
+#' @examples
+#' df <-  subset(P2E2pilot,subject=="CB" & target==1 & condition==1)
+#' calc_curves_dataframes(df, -11, 11, 16)
+#'
 gaussian_scaled<- function(efficacy,latency,precision,numObservations,minSPE,maxSPE,grain) {
   #At each minSPE:grain:maxSPE value, calculate Gaussian at
   #  height appropriate for plotting with the histogram of the SPE data

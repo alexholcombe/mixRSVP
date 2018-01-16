@@ -101,7 +101,7 @@ grain<-.05
 numObservations<- length(df$SPE)
 #Scale up the numObservations to compensate for the smaller grain size
 numObservations<- numObservations
-gaussianThis<- gaussianScaledForData(efficacy,latency,precision,numObservations,minSPE,maxSPE,grain) 
+gaussianThis<- gaussian_scaled(efficacy,latency,precision,numObservations,minSPE,maxSPE,grain) 
 g<-g + geom_line(data=gaussianThis,aes(x=x,y=gaussianFreq),color="darkblue",size=1.2)
 ```
 

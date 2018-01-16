@@ -2,9 +2,11 @@
 title: "Do-it-yourself histogram and curvefit plotting"
 author: "Alex Holcombe"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+      fig_caption: yes
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Do-it-yourself histogram and curvefit plotting}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,42 +18,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+The below can alternatively all be done with the plotHistWithFit function.
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
-
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
-```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## test of histogramPlotting intended to be used with the testthat package
-
-
-```{r, fig.show='hold'}
+```{r, fig.show='hold', fig.cap = "Fitted guessing distribution in yellow, gaussian in light blue, combined in green"}
 
 print(getwd())
 #in the future need to remove use of this data in tests directory because meant to be only for tests
@@ -61,7 +30,6 @@ library(dplyr)
 numItemsInStream<- length( data$letterSeq[1,] )  
 #It seems that to work with dplyr, can't have array field like letterSeq
 data$letterSeq<- NULL
-
 
 #plot histogram
 require(ggplot2)
@@ -85,11 +53,12 @@ g=ggplot(df, aes(x=SPE)) + theme_apa()
 #plot data
 g<-g+geom_histogram(binwidth=1) + xlim(minSPE,maxSPE)
 g<-g+ geom_line(data=curveDfs,aes(x=x,y=guessingFreq),color="yellow",size=1.2)
-g<-g+ geom_line(data=curveDfs,aes(x=x,y=gaussianFreq),color="lightblue",size=1.2)
-g<-g+ geom_point(data=curveDfs,aes(x=x,y=combinedFitFreq),color="green",size=1.2)
 
+h<-g+ geom_line(data=curveDfs,aes(x=x,y=gaussianFreq),color="lightblue",size=1.2)
+h<-h+ geom_point(data=curveDfs,aes(x=x,y=combinedFitFreq),color="green",size=1.2)
+h
+#Alternatively plot finer-grained (finer than histogram bins) theoretical Gaussian, in dark blue.
 
-#Also plot finer-grained theoretical Gaussian
 #   estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
 efficacy<- curveDfs$efficacy[1]; latency<- curveDfs$latency[1]; precision<- curveDfs$precision[1]
 grain<-.05
@@ -98,46 +67,14 @@ numObservations<- length(df$SPE)
 numObservations<- numObservations
 gaussianThis<- gaussian_scaled(efficacy,latency,precision,numObservations,minSPE,maxSPE,grain) 
 g<-g + geom_line(data=gaussianThis,aes(x=x,y=gaussianFreq),color="darkblue",size=1.2)
-show(g)
+g
 ```
 
+#Alternatively plot finer-grained (finer than histogram bins) theoretical Gaussian, in dark blue.
 
-######
-
-df<-data %>% dplyr::filter(subject=="BE")
-plotContinuousGaussian<-TRUE
-g<- plotHistWithFit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian)
-show(g) 
-
-#Check troublesome cases.
-
-# BE,2,1
-df<- data %>% dplyr::filter(subject=="BE" & stream=="Right" & orientation=="Canonical") 
-#estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
-g<- plotHistWithFit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian)
-show(g) #Looks like efficacy wrong. Problem is that can fit the histogram very well with a tiny precision.
-#This looks like a general problem that will often cause precision to be underestimated.
-
-#BA right Inverted
-df <- data %>% dplyr::filter(subject=="BA" & stream=="Right" & orientation=="Inverted")
-#estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
-g<- plotHistWithFit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian)
-show(g) #Looks fine
-
-#BO,1,1
-df<- data %>% dplyr::filter(subject=="BO" & stream=="Left" & orientation=="Canonical") 
-#estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
-g<- plotHistWithFit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian)
-show(g) #How did BO do it? Never guessed, almost, only twice
-
-#Get Error in eigen(nhatend) : infinite or missing values in 'x'
-# which optimx's author says might be fine:
-#http://r.789695.n4.nabble.com/Error-in-eigen-nhatend-td4708274.html
+```{r, fig.show='hold', fig.cap = "Fitted guessing distribution in yellow, gaussian in light blue, combined in green"}
 
 
 
-#estimates %>% dplyr::filter(round(p1,3)==0.280) #BA,2,2 or BE,2,1
-#1e-05  4 1e-05 334.385593546 but didn't end up being the winning replicate
-#Inspect AD,2,1 and AI,1,2 because very poor fit
-
+```
 

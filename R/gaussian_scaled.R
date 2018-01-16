@@ -18,7 +18,7 @@ areaOfGaussianBin<- function(binStart,binWidth,latency,precision) {
 #' Calculate the mixture model's Gaussian, scaled to the number of datapoints in the data
 #'
 #' Used in plot_hist_with_fit etc.
-#'#'
+#'
 #' @export
 #'
 #' @examples

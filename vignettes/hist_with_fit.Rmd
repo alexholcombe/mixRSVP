@@ -1,6 +1,6 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "Do-it-yourself histogram and curvefit plotting"
+author: "Alex Holcombe"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -22,9 +22,6 @@ Vignettes are long form documentation commonly included in packages. Because the
 - Has a smaller default figure size
 - Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
 
-## Vignette Info
-
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
 
 ## Styles
 
@@ -51,11 +48,8 @@ You can enable figure captions by `fig_caption: yes` in YAML:
 
 Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
 
-## Mine
+## test of histogramPlotting intended to be used with the testthat package
 
-# test of histogramPlotting intended to be used with the testthat package
-
-## ok
 
 ```{r, fig.show='hold'}
 
@@ -104,6 +98,7 @@ numObservations<- length(df$SPE)
 numObservations<- numObservations
 gaussianThis<- gaussian_scaled(efficacy,latency,precision,numObservations,minSPE,maxSPE,grain) 
 g<-g + geom_line(data=gaussianThis,aes(x=x,y=gaussianFreq),color="darkblue",size=1.2)
+show(g)
 ```
 
 

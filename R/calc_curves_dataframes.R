@@ -38,8 +38,8 @@ calc_curves_dataframes<- function(df,minSPE,maxSPE,numItemsInStream) {
   #calculate points at appropriate height for this data
   guessingThis<- (1-efficacy) * guessingDistro * length(df$SPE)
   curveDfs<-data.frame(x=minSPE:maxSPE,
-                     efficacy=efficacy, latency=latency, precision=precision,
-                     guessingFreq=guessingThis)
+                       efficacy=efficacy, latency=latency, precision=precision,
+                       guessingFreq=guessingThis)
   if (valAvailable) {
     curveDfs$val<- val
   }
@@ -58,3 +58,4 @@ calc_curves_dataframes<- function(df,minSPE,maxSPE,numItemsInStream) {
 
   return( curveDfs )
 }
+

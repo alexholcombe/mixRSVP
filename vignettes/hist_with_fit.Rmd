@@ -83,6 +83,7 @@ data <- data %>% mutate( orientation =ifelse(orientation==1, "Canonical","Invert
 #Test on one subject
 df<-data %>% dplyr::filter(subject=="BE")
 
+library(mixRSVP)
 #Accomplish same as plotHistWithFit functionality
 curveDfs<- calc_curves_dataframes(df,minSPE,maxSPE,numItemsInStream)
 

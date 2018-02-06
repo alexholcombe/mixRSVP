@@ -20,8 +20,8 @@ knitr::opts_chunk$set(
 )
 ```
 
-
-```{r, fig.cap = "Fitted guessing distribution in yellow, gaussian in light blue, combined in green"}
+Read in the data.
+```{r}
 
 #in the future need to move this data maybe from tests directory because meant to be only for tests
 data<- readRDS( file.path("..","tests", "alexImportBackwardsPaper2E1.Rdata") ) #.mat file been preprocessed into melted long dataframe
@@ -47,24 +47,26 @@ plotContinuousGaussian<-TRUE
 annotateIt<-TRUE
 minSPE<- -17; maxSPE<- 17
 
-g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt)
-library(ggplot2)
-g + annotate("text", x = 12, y = 25, label = "BE, Canonical, Right stream")
-show(g) 
-
 ```
 
-ok
-```{r}
-#Check troublesome cases.
+Check troublesome cases.
+
+First we'll examine a case where it appears the efficacy may be too high. Problem is that can fit the histogram very well with a tiny precision.
+This looks like a general problem that will often cause precision to be underestimated and efficacy overestimated. But I am not sure, maybe this is an appropriate fit. Quantization makes it hard to tell.
+
+```{r, fig.cap = "Fitted guessing distribution in yellow, gaussian in light blue, combined in green"}
 
 # BE,2,1
 df<- data %>% dplyr::filter(subject=="BE" & stream=="Right" & orientation=="Canonical") 
 #estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
 
-g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt) 
-show(g) #Looks like efficacy wrong. Problem is that can fit the histogram very well with a tiny precision.
-#This looks like a general problem that will often cause precision to be underestimated.
+g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt, FALSE)
+library(ggplot2)
+g + annotate("text", x = 12, y = 25, label = "BE, Canonical, Right stream")
+
+```
+
+```{r}
 
 #BA right Inverted
 df <- data %>% dplyr::filter(subject=="BA" & stream=="Right" & orientation=="Inverted")

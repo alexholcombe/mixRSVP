@@ -5,10 +5,12 @@
 \title{Plot histogram with fitted curve}
 \usage{
 plot_hist_with_fit(df, minSPE, maxSPE, targetSP, numItemsInStream,
-  plotContinuousGaussian, annotateIt)
+  plotContinuousGaussian, annotateIt, showIt)
 }
 \arguments{
 \item{annotateIt}{Add text to the plot indicating fit efficacy, latency, precision, and negative log likelihood}
+
+\item{showIt}{Show plot, otherwise only return plot object without actually showing it}
 }
 \description{
 Plot histogram with fitted curve
@@ -16,7 +18,7 @@ Plot histogram with fitted curve
 \examples{
  \dontrun{
 df <-  subset(P2E2pilot,subject=="CB" & target==1 & condition==1)
-plot_hist_with_fit(df, -11, 11, df$targetSP, 16, TRUE, TRUE)
+plot_hist_with_fit(df, -11, 11, df$targetSP, 16, TRUE, TRUE, TRUE)
  }
 
 }

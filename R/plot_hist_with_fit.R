@@ -4,6 +4,7 @@
 #' @import ggplot2
 #'
 #' @param annotateIt Add text to the plot indicating fit efficacy, latency, precision, and negative log likelihood
+#' @param showIt Show plot, otherwise only return plot object without actually showing it
 #'
 #' @export
 #'
@@ -13,7 +14,8 @@
 #' plot_hist_with_fit(df, -11, 11, df$targetSP, 16, TRUE, TRUE, TRUE)
 #'  }
 #'
-plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,plotContinuousGaussian,annotateIt,showIt) {
+plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,
+                              plotContinuousGaussian,annotateIt,showIt) {
   #targetSP is needed to construct empirical guessing distribution
   #calculate curves (predicted heights of bins for each component and combination of components
   curveDfs<- calc_curves_dataframes(df,minSPE,maxSPE,numItemsInStream) #this also does the parameter estimation
@@ -42,6 +44,9 @@ plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,plotCon
       geom_text(data=curveDfs,aes(x=-7,y=28, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse=TRUE,hjust="left") +
       geom_text(data=curveDfs,aes(x=-7,y=25, label = paste("mu==", round(latency,2), sep = "")),  parse=TRUE,hjust="left")+
       geom_text(data=curveDfs,aes(x=-7,y=22, label = paste("sigma==", round(precision,2), sep = "")), parse=TRUE,hjust="left")
+  }
+  if (missing(showIt)) {
+    showIt = TRUE
   }
   if (showIt) {
     show(g)

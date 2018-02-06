@@ -1,8 +1,5 @@
 # To-do
 
-Create vignette with some minimal analyses. Perhaps of P2E2pilot
-
-What data set did I add?
 
 # Testing
 

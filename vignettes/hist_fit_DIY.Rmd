@@ -22,10 +22,9 @@ The below can alternatively all be done with the plotHistWithFit function.
 
 ```{r, fig.show='hold', fig.cap = "Fitted guessing distribution in yellow, gaussian in light blue, combined in green"}
 
-print(getwd())
-#in the future need to remove use of this data in tests directory because meant to be only for tests
+#in the future need to move this data maybe from tests directory because meant to be only for tests
 data<- readRDS( file.path("..","tests", "alexImportBackwardsPaper2E1.Rdata") ) #.mat file been preprocessed into melted long dataframe
-#data<- readRDS( file.path("mixtureModeling/tests", "alexImportBackwardsPaper2E1.Rdata") ) #.mat file been preprocessed into melted long dataframe
+
 library(dplyr)
 numItemsInStream<- length( data$letterSeq[1,] )  
 #It seems that to work with dplyr, can't have array field like letterSeq

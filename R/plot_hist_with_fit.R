@@ -10,10 +10,10 @@
 #' @examples
 #'  \dontrun{
 #' df <-  subset(P2E2pilot,subject=="CB" & target==1 & condition==1)
-#' plot_hist_with_fit(df, -11, 11, df$targetSP, 16, TRUE, TRUE)
+#' plot_hist_with_fit(df, -11, 11, df$targetSP, 16, TRUE, TRUE, TRUE)
 #'  }
 #'
-plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,plotContinuousGaussian,annotateIt) {
+plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,plotContinuousGaussian,annotateIt,showIt) {
   #targetSP is needed to construct empirical guessing distribution
   #calculate curves (predicted heights of bins for each component and combination of components
   curveDfs<- calc_curves_dataframes(df,minSPE,maxSPE,numItemsInStream) #this also does the parameter estimation
@@ -43,7 +43,9 @@ plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,plotCon
       geom_text(data=curveDfs,aes(x=-7,y=25, label = paste("mu==", round(latency,2), sep = "")),  parse=TRUE,hjust="left")+
       geom_text(data=curveDfs,aes(x=-7,y=22, label = paste("sigma==", round(precision,2), sep = "")), parse=TRUE,hjust="left")
   }
-  show(g)
+  if (showIt) {
+    show(g)
+  }
   return(g)
 }
 

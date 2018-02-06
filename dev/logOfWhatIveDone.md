@@ -24,3 +24,9 @@ NULL
 ✔ Adding 'inst/doc' to './.gitignore'
 ✔ Creating 'vignettes/hist_with_fit.Rmd'
 ● Modify 'vignettes/hist_with_fit.Rmd'
+
+
+adding importFrom("methods", "show")
+importFrom("methods", "show")
+and ensure that your DESCRIPTION Imports field
+contains 'methods').

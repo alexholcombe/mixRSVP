@@ -1,0 +1,92 @@
+---
+title: "Vignette Title"
+author: "Alex Holcombe"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+      fig_caption: yes
+      fig_width: 7
+      fig_height: 6 
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r, fig.cap = "Fitted guessing distribution in yellow, gaussian in light blue, combined in green"}
+
+#in the future need to move this data maybe from tests directory because meant to be only for tests
+data<- readRDS( file.path("..","tests", "alexImportBackwardsPaper2E1.Rdata") ) #.mat file been preprocessed into melted long dataframe
+numItemsInStream<- length( data$letterSeq[1,] )  
+
+library(dplyr)
+
+#To use dplyr operations, each column must be a 1d atomic vector or a list. So, can't have array fields like letterSeq
+data$letterSeq<- NULL
+
+#Give conditions better names than 1 and 2
+names(data)[names(data) == 'target'] <- 'stream'
+data <- data %>% mutate( stream =ifelse(stream==1, "Left","Right") )
+#mutate condition to Orientation
+names(data)[names(data) == 'condition'] <- 'orientation'
+data <- data %>% mutate( orientation =ifelse(orientation==1, "Canonical","Inverted") )
+
+df<-data %>% dplyr::filter(subject=="BE",orientation=="Canonical",stream=="Right")
+
+library(mixRSVP)
+
+plotContinuousGaussian<-TRUE
+annotateIt<-TRUE
+minSPE<- -17; maxSPE<- 17
+
+g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt)
+library(ggplot2)
+g + annotate("text", x = 12, y = 25, label = "BE, Canonical, Right stream")
+show(g) 
+
+```
+
+ok
+```{r}
+#Check troublesome cases.
+
+# BE,2,1
+df<- data %>% dplyr::filter(subject=="BE" & stream=="Right" & orientation=="Canonical") 
+#estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
+
+g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt) 
+show(g) #Looks like efficacy wrong. Problem is that can fit the histogram very well with a tiny precision.
+#This looks like a general problem that will often cause precision to be underestimated.
+
+#BA right Inverted
+df <- data %>% dplyr::filter(subject=="BA" & stream=="Right" & orientation=="Inverted")
+#estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
+g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt) 
+show(g) #Looks fine
+
+#BO,1,1
+df<- data %>% dplyr::filter(subject=="BO" & stream=="Left" & orientation=="Canonical") 
+#estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
+g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt) 
+show(g) #How did BO do it? Never guessed, almost, only twice
+
+#Get Error in eigen(nhatend) : infinite or missing values in 'x'
+# which optimx's author says might be fine:
+#http://r.789695.n4.nabble.com/Error-in-eigen-nhatend-td4708274.html
+
+
+
+#estimates %>% dplyr::filter(round(p1,3)==0.280) #BA,2,2 or BE,2,1
+#1e-05  4 1e-05 334.385593546 but didn't end up being the winning replicate
+#Inspect AD,2,1 and AI,1,2 because very poor fit
+
+```
+

@@ -9,7 +9,6 @@ gaussian_scaled(efficacy, latency, precision, numObservations, minSPE, maxSPE,
 }
 \description{
 Used in plot_hist_with_fit etc.
-#'
 }
 \examples{
 df <-  subset(P2E2pilot,subject=="CB" & target==1 & condition==1)

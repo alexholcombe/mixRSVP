@@ -1,0 +1,48 @@
+---
+title: "Analyze an entire experiment"
+author: "Alex Holcombe"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+      fig_caption: yes
+      fig_width: 7
+      fig_height: 6 
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Read in the data, and rename some of the fields
+```{r}
+
+#.mat file been preprocessed into melted long dataframe
+numItemsInStream<- length( backwards2_E1$letterSeq[1,] )  
+
+library(dplyr)
+
+#To use dplyr operations, each column must be a 1d atomic vector or a list. So, can't have array fields like letterSeq
+data$letterSeq<- NULL
+
+#Give conditions better names than 1 and 2
+names(data)[names(data) == 'target'] <- 'stream'
+data <- data %>% mutate( stream =ifelse(stream==1, "Left","Right") )
+#mutate condition to Orientation
+names(data)[names(data) == 'condition'] <- 'orientation'
+data <- data %>% mutate( orientation =ifelse(orientation==1, "Canonical","Inverted") )
+
+df<-data %>% dplyr::filter(subject=="BE",orientation=="Canonical",stream=="Right")
+
+plotContinuousGaussian<-TRUE
+annotateIt<-TRUE
+minSPE<- -17; maxSPE<- 17
+
+```
+

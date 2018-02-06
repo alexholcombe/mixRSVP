@@ -17,7 +17,7 @@ test_that("Unproblematic data is fit to right value", {
 #Test with a problematic dataset
 test_that("Low-efficacy case", {
 
-  data<- readRDS( file.path("..","alexImportBackwardsPaper2E1.Rdata") ) #.mat file been preprocessed into melted long dataframe
+  data<- backwards2_E1 #.mat file been preprocessed into melted long dataframe
   library(dplyr)
   numItemsInStream<- length( data$letterSeq[1,] )
   #It seems that to work with dplyr, can't have array field like letterSeq

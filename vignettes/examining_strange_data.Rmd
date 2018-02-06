@@ -1,5 +1,5 @@
 ---
-title: "Vignette Title"
+title: "Data that yield bad or unusual fits"
 author: "Alex Holcombe"
 date: "`r Sys.Date()`"
 output:
@@ -51,10 +51,8 @@ minSPE<- -17; maxSPE<- 17
 
 Check troublesome cases.
 
-First we'll examine a case where it appears the efficacy may be too high. Problem is that can fit the histogram very well with a tiny precision.
-This looks like a general problem that will often cause precision to be underestimated and efficacy overestimated. But I am not sure, maybe this is an appropriate fit. Quantization makes it hard to tell.
 
-```{r, fig.cap = "Fitted guessing distribution in yellow, gaussian in light blue, combined in green"}
+```{r, fig.cap = "Fitted guessing distribution yellow, continuous Gaussian in dark blue, quantized gaussian in light blue, combined in green"}
 
 # BE,2,1
 df<- data %>% dplyr::filter(subject=="BE" & stream=="Right" & orientation=="Canonical") 
@@ -66,29 +64,58 @@ g + annotate("text", x = 12, y = 25, label = "BE, Canonical, Right stream")
 
 ```
 
+Above it appears the efficacy may be too high. Problem is that can fit the histogram very well with a tiny precision.
+This looks like a general problem that will often cause precision to be underestimated and efficacy overestimated. But I am not sure, maybe this is an appropriate fit. Quantization makes it hard to tell.
+
+
 ```{r}
 
 #BA right Inverted
 df <- data %>% dplyr::filter(subject=="BA" & stream=="Right" & orientation=="Inverted")
 #estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
-g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt) 
-show(g) #Looks fine
+g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt, FALSE)
+g + annotate("text", x = 12, y = 25, label = "BA, Inverted, Right stream")
+```
+
+This one above looks fine.
+
+
+
+```{r}
 
 #BO,1,1
 df<- data %>% dplyr::filter(subject=="BO" & stream=="Left" & orientation=="Canonical") 
 #estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
-g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt) 
-show(g) #How did BO do it? Never guessed, almost, only twice
+g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt, FALSE)
+g + annotate("text", x = 12, y = 25, label = "BO, Canonical, Left stream") 
+```
 
-#Get Error in eigen(nhatend) : infinite or missing values in 'x'
-# which optimx's author says might be fine:
-#http://r.789695.n4.nabble.com/Error-in-eigen-nhatend-td4708274.html
+How did BO do it? Never guessed, almost, only twice. We haven't seen/noticed such stellar performance in any other dataset. Of course this indicates precision is low but how low cannot be known!
 
+Running these fits typically yields a few fitting errors.
+One of them is "Error in eigen(nhatend) : infinite or missing values in 'x'"
+which optimx's author says [might be fine](http://r.789695.n4.nabble.com/Error-in-eigen-nhatend-td4708274.html)
 
+```{r}
+#AD,2,1
+df<- data %>% dplyr::filter(subject=="AD" & stream=="Right" & orientation=="Canonical") 
+g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt, FALSE)
+g + annotate("text", x = 12, y = 25, label = "AD, Canonical, Right stream") 
+```
+
+Person has a weird pattern of temporal errors, resulting in a poor fit. Fitting algorithm seems to have done a good job.
+
+```{r}
+
+#AI,1,2
+df<- data %>% dplyr::filter(subject=="AI" & stream=="Left" & orientation=="Inverted") 
+g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt, FALSE)
+g + annotate("text", x = 12, y = 25, label = "AI, Inverted, Left stream") 
 
 #estimates %>% dplyr::filter(round(p1,3)==0.280) #BA,2,2 or BE,2,1
 #1e-05  4 1e-05 334.385593546 but didn't end up being the winning replicate
 #Inspect AD,2,1 and AI,1,2 because very poor fit
-
 ```
+
+Person tended to report a letter several items after the cue if they didn't manage to get the cued letter. 
 

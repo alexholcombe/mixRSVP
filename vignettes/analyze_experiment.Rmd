@@ -61,7 +61,7 @@ g + annotate("text", x = 12, y = 25, label = "CB, Inverted, Left stream")
 
 ```
 
-Fit mixture model to whole dataset (actually a subset so that vignette execution doesn't take too long.
+Fit mixture model to whole dataset (actually a subset so that vignette execution doesn't take too long).
 
 ```{r}
 
@@ -111,7 +111,7 @@ curves<- dg %>% group_by_at(.vars = condtnVariableNames) %>%
 
 Now calculate the number of observations in each condition, which is used for scaling the pseudo-continuous (fine-grained) Gaussian. Then calculate that Gaussian curve.
 
-```{r, echo=FALSE, message=TRUE, fig.height=36, fig.width=10}
+```{r, echo=FALSE, message=TRUE}
 
 
 #Calc numObservations to each condition. This is needed only for scaling the fine-grained Gaussian
@@ -126,7 +126,7 @@ gaussFine<- estimates %>% group_by_at(.vars = condtnVariableNames) %>% do(
   gaussian_scaled_from_df(.,minSPE,maxSPE,grain) )
 ```
 
-```{r, echo=FALSE, message=TRUE, fig.height=36, fig.width=10, fig.cap = "First column is left stream. Second column is right stream. Each subject gets a pair of rows, "1" for upright letter trials, "2" for inverted letter trials."}
+```{r, echo=FALSE, message=TRUE, fig.height=36, fig.width=10, fig.cap = "Left target (first column) and right target (second column). Each subject gets two rows, one for upright letter trials, one for inverted letter trials."}
 
 #PLOT EVERYTHING
 g=ggplot(dg, aes(x=SPE)) + facet_grid(subject+orientation~stream,  scales="free_y")
@@ -144,7 +144,7 @@ g<-g+ geom_line(data=curves,aes(x=x,y=guessingFreq),color="yellow",size=sz)
 g<-g+ geom_line(data=curves,aes(x=x,y=gaussianFreq),color="lightblue",size=sz)
 
 numGroups<- length(table(df$orientation,df$subject,df$stream))
-fontSz = 5 #100/numGroups
+fontSz = 3 #100/numGroups
 g<-g + geom_text(data=curves,aes(x=-9,y=32, label = paste("--logLik==", round(val,1), sep = "")),  parse = TRUE,size=fontSz) +
   geom_text(data=curves,aes(x=-7,y=28, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse = TRUE,size=fontSz) +
   geom_text(data=curves,aes(x=-7,y=25, label = paste("mu==", round(latency,2), sep = "")),  parse = TRUE,size=fontSz)+

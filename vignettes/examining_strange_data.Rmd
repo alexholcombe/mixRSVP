@@ -24,7 +24,7 @@ Read in the data.
 ```{r}
 
 #in the future need to move this data maybe from tests directory because meant to be only for tests
-data<- readRDS( file.path("..","tests", "alexImportBackwardsPaper2E1.Rdata") ) #.mat file been preprocessed into melted long dataframe
+data <- backwards2_E1 #.mat file been preprocessed into melted long dataframe
 numItemsInStream<- length( data$letterSeq[1,] )  
 
 library(dplyr)

@@ -25,8 +25,8 @@ Read in the data, and rename some of the fields
 library(mixRSVP)
 data <- backwards2_E1
 #.mat file been preprocessed into melted long dataframe
-numItemsInStream<- length( data$letterSeq[1,] )  
-
+numItemsInStream <- length( data$letterSeq[1,] )  
+data$letterSeq <- NULL
 library(dplyr)
 
 #To use dplyr operations, each column must be a 1d atomic vector or a list. So, can't have array fields like letterSeq
@@ -40,50 +40,8 @@ names(data)[names(data) == 'condition'] <- 'orientation'
 data <- data %>% mutate( orientation =ifelse(orientation==1, "Canonical","Inverted") )
 ```
 
-Investigate why whole-experiment fitting not working by trying to fit some individual conditions
-```{r}
-df<-data %>% dplyr::filter(subject=="AA",orientation=="Canonical",stream=="Left")
 
-analyzeOneCondition(df,numItemsInStream,parameterBounds(), nReplicates=3)
-
-dataSmall <- data %>% dplyr::filter(subject=="AA",orientation=="Inverted")
-condtnVariableNames <- c("subject","orientation", "stream") # 
-
-estimates<- dataSmall %>%  #  filter(subject=="CB") %>%
-    group_by_(.dots = condtnVariableNames) %>%  #.dots needed when you have a variable containing multiple factor names
-    do( analyzeOneConditionDF(.,numItemsInStream,parameterBounds(), nReplicates=3) 
-                     )
-
-dataAAinvertedLeft <- data %>% dplyr::filter(subject=="AA",orientation=="Inverted",stream=="Left")
-analyzeOneCondition(dataSmall,numItemsInStream,parameterBounds(), nReplicates=3)
-
-estimates<- dataSmall %>%  #  filter(subject=="CB") %>%
-    group_by_(.dots = condtnVariableNames) %>%  #.dots needed when you have a variable containing multiple factor names
-    do( analyzeOneConditionDF(.,numItemsInStream,parameterBounds(), nReplicates=3) 
-                     )
-
-```
-Fit mixture model to data.
-
-```{r}
-
-condtnVariableNames <- c("subject","orientation", "stream") # 
-
-#Check whether already have parameter estimates or instead need to do it
-calculate<-FALSE
-if (!exists("estimates") | length(estimates)==0) { 
-  calculate<-TRUE
-}
-
-if (calculate) {
-  estimates<- data %>%  #  filter(subject=="CB") %>%
-    group_by_(.dots = condtnVariableNames) %>%  #.dots needed when you have a variable containing multiple factor names
-    do(  analyzeOneConditionDF(.,numItemsInStream,parameterBounds(), nReplicates=3)  )
-}
-head(estimates)
-```
-
-Plot the histogram and fit for one subject*condition.
+Plot the histogram and fit for one subject*condition*stream. This is basically a demo of plot_hist_with_fit.
 
 * yellow = guessing component 
 * light blue = Gaussian component
@@ -103,7 +61,40 @@ g + annotate("text", x = 12, y = 25, label = "CB, Inverted, Left stream")
 
 ```
 
-Plot all data (actually a subset do vignette execution doesn't take too long). First column is left stream. Second column is right stream. Each subject gets a pair of rows, "1" for upright letter trials, "2" for inverted letter trials.
+Fit mixture model to whole dataset (actually a subset so that vignette execution doesn't take too long.
+
+```{r}
+
+condtnVariableNames <- c("subject","orientation", "stream") # 
+
+#Check whether already have parameter estimates or instead need to do it
+calculate<-FALSE
+paste('calculate=',calculate)
+if (!exists("estimates"))  { 
+  calculate<-TRUE
+} else if (length(estimates)==0) {
+  calculate<-TRUE
+}
+
+df<- data %>% dplyr::filter(subject<="AK")
+
+if (calculate) {
+  estimates<- df %>%  
+    group_by_(.dots = condtnVariableNames) %>%  #.dots needed when you have a variable containing multiple factor names
+    do(  analyzeOneConditionDF(.,numItemsInStream,parameterBounds(), nReplicates=3)  )
+}
+head(estimates)
+```
+
+
+Plot all data (actually a subset so that vignette execution doesn't take too long). 
+
+I think you can't put it all into a single plot by calling plot_hist_with_fit multiple times because it returns a plot object, then would have to use grid or something to combine the plots.
+
+So, the method here is to calculate the fitted curves separately and then add them on. There should be a more integrated way to do that but then it might be harder to probe when fits go wrong?
+
+
+First calculate the fitted curves.
 
 ```{r, echo=FALSE, message=TRUE, fig.height=36, fig.width=10}
 #want fig.height of 10 per subject
@@ -111,26 +102,34 @@ Plot all data (actually a subset do vignette execution doesn't take too long). F
 library(dplyr)
 
 #Add R parameter estimates to dataframe
-df<- merge(data,estimates) 
-dg<- df %>% dplyr::filter(subject<="AX")
+dg<- merge(df,estimates) 
 
 curves<- dg %>% group_by_at(.vars = condtnVariableNames) %>% 
   do(calc_curves_dataframes(.,minSPE,maxSPE,numItemsInStream))
 
 ```
 
+Now calculate the number of observations in each condition, which is used for scaling the pseudo-continuous (fine-grained) Gaussian. Then calculate that Gaussian curve.
+
+```{r, echo=FALSE, message=TRUE, fig.height=36, fig.width=10}
+
+
 #Calc numObservations to each condition. This is needed only for scaling the fine-grained Gaussian
 #Calc the number of observations for each condition, because gaussianScaledforData needs to know.
-dfGroups<- df %>% group_by_at(.vars = condtnVariableNames) %>% summarise(nPerCond = n())
+dfGroups<- dg %>% group_by_at(.vars = condtnVariableNames) %>% summarise(nPerCond = n())
 #add nPerCond back to parameter estimates
 estimates<- merge(estimates,dfGroups)
+
+
 grain<-.05
 gaussFine<- estimates %>% group_by_at(.vars = condtnVariableNames) %>% do(
-  gaussianScaledFromDataframe(.,minSPE,maxSPE,grain) )
+  gaussian_scaled_from_df(.,minSPE,maxSPE,grain) )
+```
 
+```{r, echo=FALSE, message=TRUE, fig.height=36, fig.width=10, fig.cap = "First column is left stream. Second column is right stream. Each subject gets a pair of rows, "1" for upright letter trials, "2" for inverted letter trials."}
 
 #PLOT EVERYTHING
-g=ggplot(df, aes(x=SPE)) + facet_grid(subject+condition~target,  scales="free_y")
+g=ggplot(dg, aes(x=SPE)) + facet_grid(subject+orientation~stream,  scales="free_y")
 g<-g+geom_histogram(binwidth=1,color="grey90") + xlim(minSPE,maxSPE)
 g<-g +theme_apa() #+theme(panel.grid.minor=element_blank(),panel.grid.major=element_blank())# hide all gridlines.
 #g<-g+ theme(line=element_blank(), panel.border = element_blank())
@@ -144,7 +143,7 @@ g<-g+ geom_line(data=curves,aes(x=x,y=guessingFreq),color="yellow",size=sz)
 #Discretized Gaussian
 g<-g+ geom_line(data=curves,aes(x=x,y=gaussianFreq),color="lightblue",size=sz)
 
-numGroups<- length(table(df$condition,df$subject,df$target))
+numGroups<- length(table(df$orientation,df$subject,df$stream))
 fontSz = 5 #100/numGroups
 g<-g + geom_text(data=curves,aes(x=-9,y=32, label = paste("--logLik==", round(val,1), sep = "")),  parse = TRUE,size=fontSz) +
   geom_text(data=curves,aes(x=-7,y=28, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse = TRUE,size=fontSz) +

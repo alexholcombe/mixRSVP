@@ -77,11 +77,28 @@ gaussianScaledForDataOld<- function(efficacy,latency,precision,numObservations,m
 }
 
 
-#Need to calculate Gaussian heights at this finer grain for each condition
+#' Calculate fine-grained Gaussian from parameters dataframe
+#'
+#'
+#' @param df data.frame with columns (of only length 1) efficacy, latency, precision
+#' @param minSPE smallest possible serial position error
+#' @param maxSPE largest possible serial position error
+#' @param grain grain, which is width of bins for which will calculate the area in the Gaussian
+#'
+#' @export
+#'
+#' @examples
+#'  \dontrun{
+#' df <-  subset(P2E2pilot,subject=="CB" & target==1 & condition==1)
+#' plot_hist_with_fit(df, -11, 11, df$targetSP, 16, TRUE, TRUE, TRUE)
+#'  }
+#'
+#Modify gaussian_scaled to take parameter values from a dataframe.
+#Recall that need to calculate Gaussian heights at this finer grain for each condition
 #Each call to gaussianScaledForData returns a larger dataframe than was sent.
 # To do that with dplyr, need to be part of dataframe
 
-gaussianScaledFromDataframe<- function(df,minSPE,maxSPE,grain) {
+gaussian_scaled_from_df<- function(df,minSPE,maxSPE,grain) {
   #Should be sent a one-line dataframe with efficacy,latency,precision
   #Want to expand that into entire curve, with many different SPE values
   #nPerCond is number of observations per condition

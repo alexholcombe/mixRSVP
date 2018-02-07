@@ -53,6 +53,14 @@ estimates<- dataSmall %>%  #  filter(subject=="CB") %>%
     do( analyzeOneConditionDF(.,numItemsInStream,parameterBounds(), nReplicates=3) 
                      )
 
+dataAAinvertedLeft <- data %>% dplyr::filter(subject=="AA",orientation=="Inverted",stream=="Left")
+analyzeOneCondition(dataSmall,numItemsInStream,parameterBounds(), nReplicates=3)
+
+estimates<- dataSmall %>%  #  filter(subject=="CB") %>%
+    group_by_(.dots = condtnVariableNames) %>%  #.dots needed when you have a variable containing multiple factor names
+    do( analyzeOneConditionDF(.,numItemsInStream,parameterBounds(), nReplicates=3) 
+                     )
+
 ```
 Fit mixture model to data.
 

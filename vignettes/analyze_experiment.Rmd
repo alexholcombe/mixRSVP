@@ -47,6 +47,7 @@ df<-data %>% dplyr::filter(subject=="AA",orientation=="Canonical",stream=="Left"
 analyzeOneCondition(df,numItemsInStream,parameterBounds(), nReplicates=3)
 
 dataSmall <- data %>% dplyr::filter(subject=="AA",orientation=="Inverted")
+condtnVariableNames <- c("subject","orientation", "stream") # 
 
 estimates<- dataSmall %>%  #  filter(subject=="CB") %>%
     group_by_(.dots = condtnVariableNames) %>%  #.dots needed when you have a variable containing multiple factor names
@@ -97,11 +98,12 @@ dCB<- dplyr::filter(data,subject=="BS",orientation=="Inverted",stream=="Left")
 minSPE<- -17; maxSPE<- 17
 plotContinuousGaussian<-TRUE; annotateIt<-TRUE
 g<- plot_hist_with_fit(dCB,minSPE,maxSPE,dCB$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt, FALSE)
+library(ggplot2)
 g + annotate("text", x = 12, y = 25, label = "CB, Inverted, Left stream")
 
 ```
 
-Plot all data. First column is left stream. Second column is right stream. Each subject gets a pair of rows, "1" for upright letter trials, "2" for inverted letter trials.
+Plot all data (actually a subset do vignette execution doesn't take too long). First column is left stream. Second column is right stream. Each subject gets a pair of rows, "1" for upright letter trials, "2" for inverted letter trials.
 
 ```{r, echo=FALSE, message=TRUE, fig.height=36, fig.width=10}
 #want fig.height of 10 per subject
@@ -110,9 +112,12 @@ library(dplyr)
 
 #Add R parameter estimates to dataframe
 df<- merge(data,estimates) 
+dg<- df %>% dplyr::filter(subject<="AX")
 
-curves<- df %>% group_by_at(.vars = condtnVariableNames) %>% 
-  do(calcCurvesDataframes(.,minSPE,maxSPE,numItemsInStream))
+curves<- dg %>% group_by_at(.vars = condtnVariableNames) %>% 
+  do(calc_curves_dataframes(.,minSPE,maxSPE,numItemsInStream))
+
+```
 
 #Calc numObservations to each condition. This is needed only for scaling the fine-grained Gaussian
 #Calc the number of observations for each condition, because gaussianScaledforData needs to know.

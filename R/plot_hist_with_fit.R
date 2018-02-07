@@ -17,7 +17,7 @@
 plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,
                               plotContinuousGaussian,annotateIt,showIt) {
   #targetSP is needed to construct empirical guessing distribution
-  assert_that::assert_that(length(data) > 0)
+  assertthat::assert_that(length(data) > 0)
 
   #calculate curves (predicted heights of bins for each component and combination of components
   curveDfs<- calc_curves_dataframes(df,minSPE,maxSPE,numItemsInStream) #this also does the parameter estimation

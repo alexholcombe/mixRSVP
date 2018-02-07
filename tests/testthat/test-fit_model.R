@@ -8,9 +8,10 @@ test_that("grad default error", {
   #Error in grad.default(ufn, ans$par, ...) : function returns NA at 1.4434927002511e-050.000135401581392880.000100001 distance from x.,
   #Explained by Nash here: http://r.789695.n4.nabble.com/Re-optim-bbmle-function-returns-NA-at-td4673616.html
   data <- backwards2_E1
-  data$letterSeq<-NULL
+  numItemsInStream<- length( data$letterSeq[1,] )
+  data$letterSeq<-NULL #Have to do this because dplyr can't handle array fields
   dataAAinvertedLeft <- data %>% dplyr::filter(subject=="AA",condition==2,target==1)
-  analyzeOneCondition(dataSmall,numItemsInStream,parameterBounds(), nReplicates=9)
+  analyzeOneCondition(dataAAinvertedLeft,numItemsInStream,parameterBounds(), nReplicates=9)
 })
 
 
@@ -31,6 +32,7 @@ test_that("Decent estimates", {
   #calculate the guessing distribution, empirically (based on actual targetSP)
   pseudoUniform <- createGuessingDistribution(minSPE,maxSPE,df$targetSP,numItemsInStream)
 
+  #Don't forget that fitModel is not exported, so is only accessible from within the package
   fit<- fitModel(df$SPE, minSPE, maxSPE, pseudoUniform, startingParams, parameterBounds() )
   fit<- fit$content
   warns<- fit$warnings

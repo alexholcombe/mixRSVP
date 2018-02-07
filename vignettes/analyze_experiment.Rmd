@@ -8,7 +8,7 @@ output:
       fig_width: 7
       fig_height: 6 
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Analyze an entire experiment}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -76,7 +76,7 @@ if (!exists("estimates"))  {
   calculate<-TRUE
 }
 
-df<- data %>% dplyr::filter(subject<="AK")
+df<- data %>% dplyr::filter(subject<="AG")
 
 if (calculate) {
   estimates<- df %>%  

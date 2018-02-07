@@ -6,14 +6,15 @@
 \title{Dual-RSVP data, with letters having random orientation on each trial}
 \format{A data frame with 1200 rows and 10 variables:
 \describe{
+\item{subject}{two-letter subject code}
+\item{excluded}{this subject\emph{condition}target combo failed Goodbourn's MATLAB test of mixture model fitting significantly better than guessing only.}
+\item{condition}{1 is upright, 2 is inverted?}
 \item{target}{which target, the one in the left stream (1) or the right stream (2), this row pertains to}
 \item{SPE}{the serial position error}
 \item{allRTs}{response time}
-\item{condition}{1 is upright, 2 is inverted?}
 \item{letterSeq}{the (ordinal value of) each of the 24 letters presented in this stream}
 \item{resp}{the (ordinal value) of the letter reported}
 \item{respSP}{the serial position of the letter reported}
-\item{subject}{two-letter subject code}
 \item{targetSP}{the target serial position}
 \item{trial}{trial number}
 ...

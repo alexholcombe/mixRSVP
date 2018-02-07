@@ -38,12 +38,44 @@ data <- data %>% mutate( stream =ifelse(stream==1, "Left","Right") )
 #mutate condition to Orientation
 names(data)[names(data) == 'condition'] <- 'orientation'
 data <- data %>% mutate( orientation =ifelse(orientation==1, "Canonical","Inverted") )
-
-df<-data %>% dplyr::filter(subject=="BE",orientation=="Canonical",stream=="Right")
-
-plotContinuousGaussian<-TRUE
-annotateIt<-TRUE
-minSPE<- -17; maxSPE<- 17
-
 ```
 
+Fit mixture model to data.
+
+```{r}
+
+condtnVariableNames <- c("subject","orientation", "stream") # 
+
+#Check whether already have parameter estimates or instead need to do it
+calculate<-FALSE
+if (!exists("estimates")) { 
+  calculate<-TRUE
+}
+
+if (calculate) {
+  estimates<- data %>%  #  filter(subject=="CB") %>%
+    group_by_(.dots = condtnVariableNames) %>%  #.dots needed when you have a variable containing multiple factor names
+    do(  analyzeOneCondition(.,numItemsInStream,parameterBounds(), nReplicates=3)  )
+  estimates<- estimates %>% rename(efficacy = p1, latency = p2, precision = p3)
+}
+head(estimates)
+```
+
+Plot the histogram and fit for one subject*condition.
+
+* yellow = guessing component 
+* light blue = Gaussian component
+* green = sum of the guessing and Gaussian components. In other words, the histogram heights predicted by the model
+* dark blue = continuous Gaussian. This helps get a sense of the effect of discretising the Gaussian. For instance, it's possible  for the Gaussian peak to rise high above the bars and still fit the discrete bins, suggesting  undesirably high estimates of the efficacy (likely accompanied by an undesirably low precision)
+
+For goodness of fit, lower neg log likelihood means better fit.
+
+```{r plotOneS, echo=FALSE, message=FALSE}
+
+dCB<- dplyr::filter(data,subject=="BS",orientation=="Inverted",stream=="Left")  
+minSPE<- -17; maxSPE<- 17
+plotContinuousGaussian<-TRUE; annotateIt<-TRUE
+g<- plot_hist_with_fit(dCB,minSPE,maxSPE,dCB$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt, FALSE)
+g + annotate("text", x = 12, y = 25, label = "CB, Inverted, Left stream")
+
+```

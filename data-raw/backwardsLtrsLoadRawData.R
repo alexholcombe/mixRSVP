@@ -70,7 +70,6 @@ if (sanityVisualCheck) {
   g
 }
 
-
 #Meaning of condition variable
 #1 - upright
 #2 - inverted
@@ -78,7 +77,7 @@ if (sanityVisualCheck) {
 E$excluded<-FALSE
 excluded$excluded<-TRUE
 
-data<-rbind(E,excluded)
+backwards2_E1<-rbind(E,excluded)
 
 #save dataframe into proper library data directory
-save(data, file = "data/backwards2_E1.rdata")
+save(backwards2_E1, file = "data/backwards2_E1.rda", compress="bzip2")

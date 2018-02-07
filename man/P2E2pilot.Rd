@@ -3,7 +3,8 @@
 \docType{data}
 \name{P2E2pilot}
 \alias{P2E2pilot}
-\title{Dual-RSVP performance, with letters having random orientation on each frame}
+\alias{P2E2pilot}
+\title{Dual-RSVP data, with letters having random orientation on each frame}
 \format{A data frame with 1200 rows and 23 variables:
 \describe{
 \item{target}{which target, the one in the left stream (1) or the right stream (2), this row pertains to}
@@ -23,11 +24,18 @@
 }}
 \source{
 Alex's GoogleDrive folder, "/Users/alexh/Google\ Drive/Backwards\ paper/secondPaper/E2/Data/Raw", first 3 Ss run.
+
+Alex's GoogleDrive folder, "/Users/alexh/Google\ Drive/Backwards\ paper/secondPaper/E2/Data/Raw", first 3 Ss run.
 }
 \usage{
 P2E2pilot
+
+P2E2pilot
 }
 \description{
+A dataset of what letter three different undergrads reported
+on each of 400 different dual-stream RSVP trials.
+
 A dataset of what letter three different undergrads reported
 on each of 400 different dual-stream RSVP trials.
 }

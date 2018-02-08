@@ -13,7 +13,7 @@ analyzeOneCondition(df, numItemsInStream, paramBounds, nReplicates = 3)
 
 \item{paramBounds}{With fields lower and upper, each of length two indicating min and max val for efficacy,latency,precision}
 
-\item{nReplicates}{How many times to fit the model (with different random starting points within paramBounds}
+\item{nReplicates}{How many times to fit the model (with different random starting points within paramBounds)}
 }
 \value{
 efficay, latency, precision, val (negative log likelihood), and warnings (currently disabled, don't know why)

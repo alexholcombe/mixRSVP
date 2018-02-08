@@ -8,6 +8,8 @@ plot_hist_with_fit(df, minSPE, maxSPE, targetSP, numItemsInStream,
   plotContinuousGaussian, annotateIt, showIt)
 }
 \arguments{
+\item{df}{A dataframe that must have fields targetSP and SPE}
+
 \item{annotateIt}{Add text to the plot indicating fit efficacy, latency, precision, and negative log likelihood}
 
 \item{showIt}{Show plot, otherwise only return plot object without actually showing it}

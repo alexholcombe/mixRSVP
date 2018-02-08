@@ -3,7 +3,7 @@
 #' @param df A dataframe that must have fields targetSP and SPE
 #' @param numItemsInStream Number of items in the stream (assumed to be the same for all trials)
 #' @param paramBounds With fields lower and upper, each of length two indicating min and max val for efficacy,latency,precision
-#' @param nReplicates How many times to fit the model (with different random starting points within paramBounds
+#' @param nReplicates How many times to fit the model (with different random starting points within paramBounds)
 #' @return efficay, latency, precision, val (negative log likelihood), and warnings (currently disabled, don't know why)
 #' @examples
 #' df <-  subset(P2E2pilot,subject=="CB" & target==1 & condition==1)

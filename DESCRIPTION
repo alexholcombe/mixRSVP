@@ -1,7 +1,7 @@
 Package: mixRSVP
 Version: 0.0.0.9000
-Title: What the Package Does (one line, title case)
-Description: What the package does (one paragraph).
+Title: Mixture Model Temporal Errors In RSVP Data
+Description: Model the data from RSVP paradigms (such as asking people to report a circled letter from an a longer, successively-presented rapid series of letters) that yield temporal errors. A temporal error is when one reports not the cued (circled) letter but rather a letter presented at a different time, often a nearby time, with error -1 meaning the letter before the cued one was reported. Model the distribution of temporal errors using a mixture of a Gaussian distribution and the guessing distribution, and return their proportions and the mean (latency) and standard deviation (precision) of the Gaussian.
 Authors@R: person("Alex", "Holcombe", email = "aoholcombe@Gmail.com", role = c("aut", "cre"))
 License: MIT + file LICENSE
 Encoding: UTF-8

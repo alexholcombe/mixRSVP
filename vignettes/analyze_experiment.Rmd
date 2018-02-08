@@ -87,7 +87,7 @@ head(estimates)
 ```
 
 
-Plot all data (actually a subset so that vignette execution doesn't take too long). 
+Plot all data with fits (actually a subset so that vignette execution doesn't take too long). 
 
 I think you can't put it all into a single plot by calling plot_hist_with_fit multiple times because it returns a plot object, then would have to use grid or something to combine the plots.
 
@@ -143,7 +143,7 @@ g<-g+ geom_line(data=curves,aes(x=x,y=guessingFreq),color="yellow",size=sz)
 #Discretized Gaussian
 g<-g+ geom_line(data=curves,aes(x=x,y=gaussianFreq),color="lightblue",size=sz)
 
-numGroups<- length(table(df$orientation,df$subject,df$stream))
+numGroups<- nrow(dfGroups) # length(table(df$orientation,df$subject,df$stream)) #try nrow(dfGroups)
 fontSz = 3 #100/numGroups
 g<-g + geom_text(data=curves,aes(x=-9,y=32, label = paste("--logLik==", round(val,1), sep = "")),  parse = TRUE,size=fontSz) +
   geom_text(data=curves,aes(x=-7,y=28, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse = TRUE,size=fontSz) +

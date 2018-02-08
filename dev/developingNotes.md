@@ -7,6 +7,8 @@
 
 * Need to add Pat's quantitative criterion (or similar) to exclude subjects with low efficacy. Have got "excluded field" from his MATLAB fits in backwards2_E1 that I can compare my test with.
 
+* Add for the nReplicates parameter roxygen a link to the notes on how many fits are needed for stability 
+
 # Questions
 
 * Would be ridiculous to use ggplot2:: everytime invoked that ,but is that the way to get rid of "plot_hist_with_fit: no visible binding for global variable ‘SPE’" ?

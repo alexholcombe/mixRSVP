@@ -3,6 +3,7 @@
 #'
 #' @import ggplot2
 #'
+#' @param df A dataframe that must have fields targetSP and SPE
 #' @param annotateIt Add text to the plot indicating fit efficacy, latency, precision, and negative log likelihood
 #' @param showIt Show plot, otherwise only return plot object without actually showing it
 #'
@@ -42,10 +43,12 @@ plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,
   g<-g+ geom_point(data=curveDfs,aes(x=x,y=combinedFitFreq),color="green",size=1.2)
 
   if (annotateIt) {
-    g<-g + geom_text(data=curveDfs,aes(x=-9,y=32, label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
-      geom_text(data=curveDfs,aes(x=-7,y=28, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse=TRUE,hjust="left") +
-      geom_text(data=curveDfs,aes(x=-7,y=25, label = paste("mu==", round(latency,2), sep = "")),  parse=TRUE,hjust="left")+
-      geom_text(data=curveDfs,aes(x=-7,y=22, label = paste("sigma==", round(precision,2), sep = "")), parse=TRUE,hjust="left")
+    yLimMax<-layer_scales(g)$y$range$range[2]
+    y<-yLimMax*.75
+    g<-g + geom_text(data=curveDfs,aes(x=-9,y=y, label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
+      geom_text(data=curveDfs,aes(x=-7,y=y-4, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse=TRUE,hjust="left") +
+      geom_text(data=curveDfs,aes(x=-7,y=y-7, label = paste("mu==", round(latency,2), sep = "")),  parse=TRUE,hjust="left")+
+      geom_text(data=curveDfs,aes(x=-7,y=y-10, label = paste("sigma==", round(precision,2), sep = "")), parse=TRUE,hjust="left")
   }
   if (missing(showIt)) {
     showIt = TRUE

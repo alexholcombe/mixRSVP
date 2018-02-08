@@ -17,14 +17,23 @@ knitr::opts_chunk$set(
 The goal of mixRSVP is to mixture model temporal errors in reports of an item from an array or a stream, presently using a mixture model of uniform and Gaussian distributions.
 [Here](https://alexholcombe.wordpress.com/2015/04/05/reporting-items-from-a-stream-and-mixture-modeling-to-reveal-buffering-and-a-bottleneck/) is an explanation of what the hell that means.
 
+## Installation
+
+```{r install}
+library('devtools') #first install_packages('devtools') if you don't have it already
+devtools::install_github('alexholcombe/mixRSVP',build_vignettes=TRUE)
+```
+
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Fit some of one of the provided datasets and plot the histogram of serial position errors together with the fitted curve.
+
 
 ```{r example}
-## basic example code
+ df <-  subset(P2E2pilot,subject=="CB" & target==1 & condition==1)
+ plot_hist_with_fit(df, -11, 11, df$targetSP, 16, TRUE, TRUE, TRUE)
 ```
 
 ## History
 
-Patrick Goodbourn programmed mixture modeling RSVP serial position errors in MATLAB. [Certifiedwaif](https://github.com/certifiedwaif/) did initial [port](https://github.com/certifiedwaif/AttentionalBlink) it to R, and then Alex [functionfied and improved things](https://github.com/alexholcombe/MixtureModelRSVP) before making it into this package.
+Patrick Goodbourn programmed mixture modeling RSVP serial position errors in MATLAB. [Certifiedwaif](https://github.com/certifiedwaif/) did initial [port](https://github.com/certifiedwaif/AttentionalBlink) it to R, and then Alex [functionfied and improved things](https://github.com/alexholcombe/MixtureModelRSVP) before making it into [this package](https://github.com/alexholcombe/mixRSVP).

@@ -145,9 +145,11 @@ g<-g+ geom_line(data=curves,aes(x=x,y=gaussianFreq),color="lightblue",size=sz)
 
 numGroups<- nrow(dfGroups) # length(table(df$orientation,df$subject,df$stream)) #try nrow(dfGroups)
 fontSz = 3 #100/numGroups
-g<-g + geom_text(data=curves,aes(x=-9,y=32, label = paste("--logLik==", round(val,1), sep = "")),  parse = TRUE,size=fontSz) +
-  geom_text(data=curves,aes(x=-7,y=28, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse = TRUE,size=fontSz) +
-  geom_text(data=curves,aes(x=-7,y=25, label = paste("mu==", round(latency,2), sep = "")),  parse = TRUE,size=fontSz)+
-  geom_text(data=curves,aes(x=-7,y=22, label = paste("sigma==", round(precision,2), sep = "")),  parse = TRUE,size=fontSz)
+yLimMax<-layer_scales(g)$y$range$range[2]
+y<-yLimMax*.75 #for text annotation
+g<-g + geom_text(data=curves,aes(x=-9,y=y, label = paste("-logLik==", round(val,1), sep = "")),  parse = TRUE,size=fontSz) +
+  geom_text(data=curves,aes(x=-7,y=y-4, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse = TRUE,size=fontSz) +
+  geom_text(data=curves,aes(x=-7,y=y-7, label = paste("mu==", round(latency,2), sep = "")),  parse = TRUE,size=fontSz)+
+  geom_text(data=curves,aes(x=-7,y=y-10, label = paste("sigma==", round(precision,2), sep = "")),  parse = TRUE,size=fontSz)
 show(g)
 ```

@@ -227,3 +227,17 @@ likelihoodOneConditionForDplyr<- function(df,numItemsInStream) {
   return(data.frame(val=l))
 }
 
+likelihood_guessing <- function(df, numItemsInStream)
+{
+  #Calculate log likelihood of pure guessing model
+  #The guessing model is that 100% of resopnses are drawn from the pseudoUniform distribution
+
+  possibleTargetSP<- sort(unique(df$targetSP))
+  minTargetSP <- min(possibleTargetSP)
+  maxTargetSP <- max(possibleTargetSP)
+  minSPE <- 1 - maxTargetSP
+  maxSPE <- numItemsInStream - minTargetSP
+
+  pseudoUniform <- createGuessingDistribution(minSPE,maxSPE,targetSP,numItemsInStream)
+
+}

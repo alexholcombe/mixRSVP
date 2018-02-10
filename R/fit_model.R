@@ -52,3 +52,5 @@ fitModel <- function(SPEs, minSPE, maxSPE, pseudoUniform, parameterGuess, paramB
 #Before I switched to optimx, I used:
 #fit <- optim(parameterGuess, pdf_normmixture_single_par, lower=parametersLowerBound, upper=parametersUpperBound,
 #             control=list(trace=0), method="L-BFGS-B")
+
+

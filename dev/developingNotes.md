@@ -9,6 +9,20 @@
 
 * Add for the nReplicates parameter roxygen a link to the notes on how many fits are needed for stability 
 
+* add a link somewhere to compareMATLABtoR.html 
+
+# Stats
+
+For comparing models, for the AB case of having two episodes, Pat used Bayesian Information Criteria (BIC) for the single- and dual-episode models, based on the combined T1 and T2 distribution, to determine when there is evidence of a second attentional episode.  in AB_compare_models.m
+
+For comparing guessing only to mixture, Pat did:
+
+%         % Test for a significant difference in log likelihoods
+%         [h,pValue,stat,cValue] = lratiotest(-minNegLogLikelihood,-uniformNegLogLikelihood,nFreeParameters,pCrit);
+
+The mixture model has 3 degrees of freedom I think (e, u, sigma) and the guessing distrbiutino zero.
+    
+
 # Questions
 
 * Would be ridiculous to use ggplot2:: everytime invoked that ,but is that the way to get rid of "plot_hist_with_fit: no visible binding for global variable ‘SPE’" ?

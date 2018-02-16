@@ -1,15 +1,18 @@
 
 annotate_fit <- function(g,curvesDf) {
 
-  yLimMax<-layer_scales(g)$y$range$range[2]
-  y<-yLimMax*.8
+  x <- layer_scales(g)$x$range$range[1] + 3 #xlim minimum
+  yLimMax<- layer_scales(g)$y$range$range[2]
+  y<-yLimMax*.95
+  ySpaceToOccupy <- y/2
+  ys<- seq(y,y-ySpaceToOccupy,length.out=5)
   g<-g+
-    geom_text(data=curvesDf,aes(x=-7,y=y, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse=TRUE,hjust="left") +
-    geom_text(data=curvesDf,aes(x=-7,y=y-4, label = paste("mu==", round(latency,2), sep = "")),  parse=TRUE,hjust="left")+
-    geom_text(data=curvesDf,aes(x=-7,y=y-7, label = paste("sigma==", round(precision,2), sep = "")), parse=TRUE,hjust="left")
-  if ( "pLRtest" %in% names(curvesDf) ) {
-    g<-g + geom_text(data=curvesDf,aes(x=-7,y=y-12, label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
-       geom_text(data=curvesDf, aes(x=-7, y=y-14, label = paste("p==",round(pLRtest,3), sep="")),parse=TRUE,hjust="left")
+    geom_text(data=curvesDf, x=x, y= ys[1], aes(label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse=TRUE,hjust="left")+
+    geom_text(data=curvesDf, x=x, y= ys[2], aes(label = paste("mu==", round(latency,2), sep = "")),  parse=TRUE,hjust="left")+
+    geom_text(data=curvesDf, x=x, y= ys[3], aes(label = paste("sigma==", round(precision,2), sep = "")), parse=TRUE,hjust="left")
+    if ( "pLRtest" %in% names(curvesDf) ) {
+      g<-g + geom_text(data=curvesDf,x=x-1,y=ys[4],aes(label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
+         geom_text(data=curvesDf,x=x, y=ys[5], aes(label = paste("p==",round(pLRtest,3), sep="")),parse=TRUE,hjust="left")
   }
   return (g)
 }

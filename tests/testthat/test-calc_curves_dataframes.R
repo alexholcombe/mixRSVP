@@ -1,4 +1,4 @@
-context("test-calc_curves_dataframes.R")
+context("test-calc_curves_dataframe.R")
 
 #To testthat, run test_file("tests/testthat/test-calc_curves_dataframes.R")
 

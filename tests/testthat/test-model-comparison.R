@@ -18,7 +18,7 @@ test_that("simplest ground truth", {
 
   # Make y dependent on the other two variables
   y = b + 1*x + noise # ifelse(a==1, 0.25, 0)
-  mydata = data.frame(y,a,b)
+  mydata = data.frame(y,x,b)
 
   plot(x,y)
 
@@ -59,7 +59,7 @@ test_that("fake guessing observer fails likelihood ratio test", {
   minSPE <- 1 - maxTargetSP
   maxSPE <- numItemsInStream - minTargetSP
   bounds <- parameterBounds()
-
+  nTrials<- nrow(df)
   set.seed(1) # Reproducibility
 
 
@@ -100,7 +100,7 @@ test_that("hybrid observer", {
   maxSPE <- numItemsInStream - minTargetSP
   bounds <- parameterBounds()
   set.seed(1) # Reproducibility
-
+  nTrials<- nrow(df)
   #create guesser
   guessingDistribution <- createGuessingDistribution(minSPE,maxSPE,df$targetSP,numItemsInStream)
   #Use the actual guessing distribution as the SPEs by sampling without replacement

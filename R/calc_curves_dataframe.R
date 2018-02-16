@@ -5,6 +5,9 @@
 #' calculate the curves.
 #'
 #' @param df the data as a dataframe. Must contain SPE and targetSP
+#' @param minSPE smallest possible serial position error
+#' @param maxSPE largest possible serial position error
+#' @param numItemsInStream number of items in the RSVP stream (the stimulus)
 #'
 #' @export
 #'

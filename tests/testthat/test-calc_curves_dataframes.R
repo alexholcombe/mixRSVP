@@ -1,6 +1,6 @@
 context("test-calc_curves_dataframe.R")
 
-#To testthat, run test_file("tests/testthat/test-calc_curves_dataframes.R")
+#To testthat, run test_file("tests/testthat/test-calc_curves_dataframe.R")
 
 #Read in some data to fit
 df<-readRDS( file.path("..","exampleSubject.Rdata") )

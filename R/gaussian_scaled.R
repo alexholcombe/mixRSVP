@@ -23,7 +23,7 @@ areaOfGaussianBin<- function(binStart,binWidth,latency,precision) {
 #'
 #' @examples
 #' df <-  subset(P2E2pilot,subject=="CB" & target==1 & condition==1)
-#' calc_curves_dataframes(df, -11, 11, 16)
+#' calc_curves_dataframe(df, -11, 11, 16)
 #'
 gaussian_scaled<- function(efficacy,latency,precision,numObservations,minSPE,maxSPE,grain) {
   #At each minSPE:grain:maxSPE value, calculate Gaussian at

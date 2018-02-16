@@ -129,7 +129,7 @@ gaussFine<- estimates %>% group_by_at(.vars = condtnVariableNames) %>% do(
 ```{r, echo=FALSE, message=TRUE, fig.height=36, fig.width=10, fig.cap = "Left target (first column) and right target (second column). Each subject gets two rows, one for upright letter trials, one for inverted letter trials."}
 
 #PLOT EVERYTHING
-g=ggplot(dg, aes(x=SPE)) + facet_grid(subject+orientation~stream,  scales="free_y")
+g=ggplot(dg, aes(x=SPE)) + facet_grid(subject+orientation~stream) #,  scales="free_y")
 g<-g+geom_histogram(binwidth=1,color="grey90") + xlim(minSPE,maxSPE)
 g<-g +theme_apa() #+theme(panel.grid.minor=element_blank(),panel.grid.major=element_blank())# hide all gridlines.
 #g<-g+ theme(line=element_blank(), panel.border = element_blank())
@@ -145,15 +145,18 @@ g<-g+ geom_line(data=curves,aes(x=x,y=gaussianFreq),color="lightblue",size=sz)
 
 numGroups<- nrow(dfGroups) # length(table(df$orientation,df$subject,df$stream)) #try nrow(dfGroups)
 fontSz = 3 #100/numGroups
-yLimMax<-layer_scales(g)$y$range$range[2]
-y<-yLimMax*.75 #for text annotation
-g<-g + geom_text(data=curves,aes(x=-9,y=y, label = paste("-logLik==", round(val,1), sep = "")),  parse = TRUE,size=fontSz) +
-  geom_text(data=curves,aes(x=-7,y=y-4, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse = TRUE,size=fontSz) +
-  geom_text(data=curves,aes(x=-7,y=y-7, label = paste("mu==", round(latency,2), sep = "")),  parse = TRUE,size=fontSz)+
-  geom_text(data=curves,aes(x=-7,y=y-10, label = paste("sigma==", round(precision,2), sep = "")),  parse = TRUE,size=fontSz)
-g<-g + 
-  geom_text(data=curves,aes(x=-9,y=y-10, label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
-  geom_text(data=curves, aes(x=-7, y=y-12, label = paste("p==",round(pLRtest,3), sep="")),parse=TRUE,hjust="left")
+g<- annotate_fit(g,curves) #assumes curvesDf includes efficacy,latency,precision
+show(g)
+# 
+# yLimMax<-layer_scales(g)$y$range$range[2]
+# y<-yLimMax*.75 #for text annotation
+# g<-g + geom_text(data=curves,aes(x=-9,y=y, label = paste("-logLik==", round(val,1), sep = "")),  parse = TRUE,size=fontSz) +
+#   geom_text(data=curves,aes(x=-7,y=y-4, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse = TRUE,size=fontSz) +
+#   geom_text(data=curves,aes(x=-7,y=y-7, label = paste("mu==", round(latency,2), sep = "")),  parse = TRUE,size=fontSz)+
+#   geom_text(data=curves,aes(x=-7,y=y-10, label = paste("sigma==", round(precision,2), sep = "")),  parse = TRUE,size=fontSz)
+# g<-g + 
+#   geom_text(data=curves,aes(x=-9,y=y-10, label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
+#   geom_text(data=curves, aes(x=-7, y=y-12, label = paste("p==",round(pLRtest,3), sep="")),parse=TRUE,hjust="left")
 
 show(g)
 ```

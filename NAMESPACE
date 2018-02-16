@@ -2,6 +2,7 @@
 
 export(analyzeOneCondition)
 export(analyzeOneConditionDF)
+export(annotate_fit)
 export(calc_curves_dataframe)
 export(createGuessingDistribution)
 export(gaussian_scaled)

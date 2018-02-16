@@ -1,4 +1,13 @@
-
+#' Annotate histogram with parameter vals and stats
+#' Returns the ggplot object you passed it, but annotated.
+#' @import ggplot2
+#'
+#' @param g The ggplot object to annotate
+#' @param curvesDf A dataframe containing columns for the parameter values for each condition
+#'
+#' @export
+#'
+#'
 annotate_fit <- function(g,curvesDf) {
 
   x <- layer_scales(g)$x$range$range[1] + 3 #xlim minimum
@@ -12,7 +21,7 @@ annotate_fit <- function(g,curvesDf) {
     geom_text(data=curvesDf, x=x, y= ys[3], aes(label = paste("sigma==", round(precision,2), sep = "")), parse=TRUE,hjust="left")
     if ( "pLRtest" %in% names(curvesDf) ) {
       g<-g + geom_text(data=curvesDf,x=x-1,y=ys[4],aes(label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
-         geom_text(data=curvesDf,x=x, y=ys[5], aes(label = paste("p==",round(pLRtest,3), sep="")),parse=TRUE,hjust="left")
+         geom_text(data=curvesDf,x=x, y=ys[5], aes(label = paste("p==",round(pLRtest,5), sep="")),parse=TRUE,hjust="left")
   }
   return (g)
 }

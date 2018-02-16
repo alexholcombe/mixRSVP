@@ -39,7 +39,7 @@ test_that("Low-efficacy case", {
   discrepancyLow <- all( abs( discrepancy ) < .1 )
   expect_true( discrepancyLow )
 
-  expect_true( estimates$pLRtest < 1e-07 ) #efficacy only .28 but still passes likelihood ratio test with flying colors
+  expect_lt( estimates$pLRtest, 1e-07 ) #efficacy only .28 but still passes likelihood ratio test with flying colors
 }
 )
 
@@ -49,7 +49,7 @@ test_that("can combine results of analyzeOneConditionDf into dataframe", {
   #If works, won't ever get this error:
   # cannot coerce class "c("simpleWarning", "warning", "condition")" to a data.frame
 
-  data <- backwards2_E1 #.mat file been preprocessed into melted long dataframe
+  data <- backwards2_E1 #.mat files been preprocessed into melted long dataframe
   numItemsInStream<- length( data$letterSeq[1,] )
   #It seems that to work with dplyr, can't have array field like letterSeq
   data$letterSeq<- NULL
@@ -58,10 +58,11 @@ test_that("can combine results of analyzeOneConditionDf into dataframe", {
   #But need a better case where warnings returned
   BA2 <- data %>% dplyr::filter(subject=="BA" & target==2) # & condition==2)
 
-  expect_output( BA2 %>%
+  estimates<- BA2 %>%
     group_by_(.dots = condtnVariableNames) %>%  #.dots needed when you have a variable containing multiple factor names
-      do(  analyzeOneConditionDF(.,numItemsInStream,parameterBounds(), nReplicates=1)  )
-  )
+    do(  analyzeOneConditionDF(.,numItemsInStream,parameterBounds(), nReplicates=1)  )
+
+  expect_length(estimates,10) #basically just checking it works
 })
 
 

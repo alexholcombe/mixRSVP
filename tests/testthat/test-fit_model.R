@@ -12,7 +12,7 @@ test_that("Check null warning no longer occurs", {
   #It seems that to work with dplyr, can't have array field like letterSeq
   data$letterSeq<- NULL
 
-  dataAAinvertedLeft <- data %>% dplyr::filter(subject=="AA",condition==2,target==1)
+  df <- data %>% dplyr::filter(subject=="AA",condition==2,target==1)
 
   startingParams<- parametersGuess( parameterBounds()$lower, parameterBounds()$upper )
   possibleTargetSP<- sort(unique(df$targetSP))

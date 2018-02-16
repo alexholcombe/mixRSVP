@@ -42,6 +42,8 @@ fitModel <- function(SPEs, minSPE, maxSPE, pseudoUniform, parameterGuess, paramB
                   lower=paramBounds$lower, upper=paramBounds$upper,
                   control=ctrl)
            )
+  #Replace NULL with None
+  fit$warnings[ is.null(fit$warnings) ] <- "None"
   return(fit)
 }
 

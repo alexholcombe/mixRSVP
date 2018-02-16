@@ -1,5 +1,12 @@
 # To-do
 
+*  Add   set.seed(1) # Reproducibility
+to everything
+
+* Work out why likelihood ratio test is so lenient
+
+* Write function for annotating with all the parameters, and p-value
+
 * Add inferential stats to analyze_experiment.Rmd vignette
 
 * Pesky fitting errors.  Error in grad.default(ufn, ans$par, ...) : 

@@ -1,22 +1,36 @@
 context("test-fit_model.R")
 
-#Try a dataset that can give grad.default pesky fitting error like
 #To testthat, run test_file("tests/testthat/test-fit_model.R")
 
-test_that("grad default error", {
-  #Trying to get on top of occasional believed-harmless error in function fit, that looks like:
-  #Error in grad.default(ufn, ans$par, ...) : function returns NA at 1.4434927002511e-050.000135401581392880.000100001 distance from x.,
-  #Explained by Nash here: http://r.789695.n4.nabble.com/Re-optim-bbmle-function-returns-NA-at-td4673616.html
-  data <- backwards2_E1
-  numItemsInStream<- length( data$letterSeq[1,] )
-  data$letterSeq<-NULL #Have to do this because dplyr can't handle array fields
-  dataAAinvertedLeft <- data %>% dplyr::filter(subject=="AA",condition==2,target==1)
-  analyzeOneCondition(dataAAinvertedLeft,numItemsInStream,parameterBounds(), nReplicates=9)
-})
+test_that("Check null warning no longer occurs", {
+  #Having warnings be NULL is a problem because when assign to a different dataframe, will delete the column
+  #so fit_model is supposed to replace NULLs with None
 
+  data <- backwards2_E1 #.mat file been preprocessed into melted long dataframe
+  library(dplyr)
+  numItemsInStream<- length( data$letterSeq[1,] )
+  #It seems that to work with dplyr, can't have array field like letterSeq
+  data$letterSeq<- NULL
+
+  dataAAinvertedLeft <- data %>% dplyr::filter(subject=="AA",condition==2,target==1)
+
+  startingParams<- parametersGuess( parameterBounds()$lower, parameterBounds()$upper )
+  possibleTargetSP<- sort(unique(df$targetSP))
+  minTargetSP <- min(possibleTargetSP)
+  maxTargetSP <- max(possibleTargetSP)
+  minSPE <- 1 - maxTargetSP
+  maxSPE <- numItemsInStream - minTargetSP
+  #calculate the guessing distribution, empirically (based on actual targetSP)
+  pseudoUniform <- createGuessingDistribution(minSPE,maxSPE,df$targetSP,numItemsInStream)
+
+  #Don't forget that fitModel is not exported, so is only accessible from within the package
+  fit<- fitModel(df$SPE, minSPE, maxSPE, pseudoUniform, startingParams, parameterBounds() )
+
+  expect_equal(fit$warnings[1], "None")
+}
+)
 
 test_that("Decent estimates", {
-  print(getwd())
   df<-readRDS( file.path("..","exampleSubject.Rdata") ) #because dir will be tests/testthat
   #library(dplyr)
   df<- dplyr::filter(df, condition==1 & target==1)
@@ -34,8 +48,8 @@ test_that("Decent estimates", {
 
   #Don't forget that fitModel is not exported, so is only accessible from within the package
   fit<- fitModel(df$SPE, minSPE, maxSPE, pseudoUniform, startingParams, parameterBounds() )
-  fit<- fit$content
   warns<- fit$warnings
+  fit<- fit$content
 
   #Check that standard fit method gives decent results
   expectedParamEstimates<- c(.84,.48,.99) # c(.37,1.2,.017)  #from L-BFGS-B

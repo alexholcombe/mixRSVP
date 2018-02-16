@@ -45,10 +45,14 @@ plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,
   if (annotateIt) {
     yLimMax<-layer_scales(g)$y$range$range[2]
     y<-yLimMax*.75
-    g<-g + geom_text(data=curveDfs,aes(x=-9,y=y, label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
-      geom_text(data=curveDfs,aes(x=-7,y=y-4, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse=TRUE,hjust="left") +
-      geom_text(data=curveDfs,aes(x=-7,y=y-7, label = paste("mu==", round(latency,2), sep = "")),  parse=TRUE,hjust="left")+
-      geom_text(data=curveDfs,aes(x=-7,y=y-10, label = paste("sigma==", round(precision,2), sep = "")), parse=TRUE,hjust="left")
+    g<-g+
+      geom_text(data=curveDfs,aes(x=-7,y=y, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse=TRUE,hjust="left") +
+      geom_text(data=curveDfs,aes(x=-7,y=y-4, label = paste("mu==", round(latency,2), sep = "")),  parse=TRUE,hjust="left")+
+      geom_text(data=curveDfs,aes(x=-7,y=y-7, label = paste("sigma==", round(precision,2), sep = "")), parse=TRUE,hjust="left")
+    if ( "pLRtest" %in% names(curveDfs) ) {
+      g<-g + geom_text(data=curveDfs,aes(x=-7,y=y-12, label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
+           geom_text(data=curveDfs, aes(x=-7, y=y-14, label = paste("p==",round(pLRtest,3), sep="")),parse=TRUE,hjust="left")
+    }
   }
   if (missing(showIt)) {
     showIt = TRUE

@@ -199,7 +199,7 @@ likelihood_mixture_MATLAB <- function(x,p,mu,sigma,minSPE,maxSPE,guessingDistrib
 }
 
 
-likelihoodOneConditionGivenParams<- function(df, numItemsInStream, params) {
+logLik_conditionGivenParams<- function(df, numItemsInStream, params) {
   #Note that the likelihood depends on the number of observations. So it'd be unfair to compare the
   # fit across different datasets. Could divide by the number of observations to calculate
   # the average likelihood but probably probabilities don't work that way.
@@ -217,20 +217,21 @@ likelihoodOneConditionGivenParams<- function(df, numItemsInStream, params) {
   # Sometimes pdf_normmixture_single returns 0. And the log of 0 is -Inf. So we add
   # 1e-8 to make the value we return finite. This allows optim() to successfully
   # optimise the function.
-  return(-sum(log(likelihoodEachObservation + 1e-8)))
+  return(sum(log(likelihoodEachObservation + 1e-8)))
 }
 
 ################
 likelihoodOneConditionForDplyr<- function(df,numItemsInStream) {
   params<- df[1,c("efficacy","latency","precision")]
-  l<- likelihoodOneConditionGivenParams(df, numItemsInStream, params)
+  l<- logLik_conditionGivenParams(df, numItemsInStream, params)
   return(data.frame(val=l))
 }
 
-likelihood_guessing <- function(df, numItemsInStream)
+logLikGuessing <- function(df, numItemsInStream)
 {
   #Calculate log likelihood of pure guessing model. Likelihood means probability of the data.
   #The guessing model is that 100% of resopnses are drawn from the pseudoUniform distribution
+  #An alternative way to calculate this would be to set efficacy is zero. I should try that in the test.
 
   possibleTargetSP<- sort(unique(df$targetSP))
   minTargetSP <- min(possibleTargetSP)
@@ -257,5 +258,5 @@ likelihood_guessing <- function(df, numItemsInStream)
   #Really the probability of the dataset is the product of all the probabilities, prod(guessingComponentProbs + 1e-8),
   #but you run the risk of creating a number too small for the computer to handle. Therefore you take advantage of
   #the log property that you can log the individuals and then sum them, so the below is equivalent to log(prod(guessingComponentProbs + 1e-8))
-  return(-sum(logLikelihoods))
+  return(sum(logLikelihoods))
 }

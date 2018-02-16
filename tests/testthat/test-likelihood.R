@@ -1,5 +1,7 @@
 context("test-likelihood.R")
 
+#test_file("tests/testthat/test-likelihood.R")
+
 test_that("likelihood guessing check 2 cases", {
 
   #From an actual experiment
@@ -21,14 +23,14 @@ test_that("likelihood guessing check 2 cases", {
   guesses<- sample(minSPE:maxSPE,nTrials,replace=TRUE,prob=guessingDistribution) #https://stackoverflow.com/a/46590082/302378
   #hist(guesses, breaks=seq(minSPE,maxSPE) )
   df$SPE <- guesses
-  negLogLik<- likelihood_guessing(df,numItemsInStream)
+  negLogLik<- -1* logLikGuessing(df,numItemsInStream)
   expect_equal(negLogLik,341.0288,tolerance=1e-3)
 
 
   #A real series of SPEs with a reasonable efficacy,  from subset(backwards2_E1, subject=="AA" & condition==2 & target==1)
   df$SPE <- scan( textConnection('1 9 -3 -7 8 1 17 2 -4 -3 1 1 2 1 1 6 -8 2 -7 1 4 -5 1 1 0 -7 1 0 1 1 1 2 6 11 0 0 0 -1 1 -8 -2 1 -12 1 1 -10 -13 -10 1 -1 1 3 -3 0 -2 1 3 1 1 -11 0 -3 -4 -3 1 1 2 1 -9 1 1 -3 -1 -1 5 9 -3 1 1 11 -7 -6 15 1 0 -1 2 -8 1 13 2 -3 -3 1 -13 -1 -11 1 6 1') )
   #hist(df$SPE, breaks=seq(minSPE,maxSPE) )
-  negLogLik<- likelihood_guessing(df,numItemsInStream)
+  negLogLik<- -1* logLikGuessing(df,numItemsInStream)
   expect_equal( negLogLik, 330.0893,  tolerance=1e-3 )
 
 })

@@ -1,11 +1,12 @@
 #Used by analyzeOneCondition and
-doFit <- function( SPE, minSPE, maxSPE ) {
+doFit <- function( SPE, minSPE, maxSPE, pseudoUniform, paramBounds ) {
   #Calculate parameter guess
   startingParams<- parametersGuess( paramBounds$lower, paramBounds$upper )
   fit<- fitModel(SPE, minSPE, maxSPE, pseudoUniform, startingParams, paramBounds)
+  warns<- fit$warnings
   fit<- fit$content
   fitMetric<- fit$value
-  warns<- fit$warnings
+  #Need to replace any NULL warnings with None, otherwise assigning this to other dataframes will delete that column
   fitNoNames<-as.numeric(fit) #Otherwise p1, p2, p3 names preserved, which is confusing
   return( list(efficacy=fitNoNames[1], latency=fitNoNames[2], precision=fitNoNames[3], val=fitMetric, warnings=warns) )
 }
@@ -23,12 +24,12 @@ fitOneCondition<- function(df, numItemsInStream, paramBounds, nReplicates=3) {
   pseudoUniform <- createGuessingDistribution(minSPE,maxSPE,df$targetSP,numItemsInStream)
 
   # Set some model-fitting parameters.
-  fitMaxIter <- 10^4# Maximum number of fit iterations
-  fitMaxFunEvals <- 10^4# Maximum number of model evaluations
+  #fitMaxIter <- 10^4# Maximum number of fit iterations
+  #fitMaxFunEvals <- 10^4# Maximum number of model evaluations
 
   for (n in 1:nReplicates) { #fit the model many times (with different starting parameters)
 
-    paramsPlusNegLogLikelihood<- doFit( df$SPE, minSPE, maxSPE )
+    paramsPlusNegLogLikelihood<- doFit( df$SPE, minSPE, maxSPE, pseudoUniform, paramBounds )
     #print(paramsPlusNegLogLikelihood)
     #Save the best estimate
     if (n==1) {
@@ -59,18 +60,17 @@ analyzeOneCondition<- function(df, numItemsInStream, paramBounds, nReplicates=3)
   # Calculate the domain of possible serial position errors.
 
   bestEstimate<- fitOneCondition(df, numItemsInStream, paramBounds, nReplicates=3)
+  answers<-bestEstimate
 
   #Check whether this fits significantly better than guessing distribution
   #and return both the statistical test and the likelihood difference
-  logLikGuessing <- -1* likelihood_guessing(df, numItemsInStream)
-  logLikMixture <- -1* bestEstimate$val
-
-  likDiff <- logLikMixture - logLikGuessing #the log likelihood ratio (difference because log)
-  df.diff = 3 # mixture model has 3 degrees of freedom, guessing 0
-  pchisq( as.numeric(likDiff) * 2, df=df.diff, lower.tail=F  )  #it's twice the diff
-
-  answers<-bestEstimate
+  negLogLikGuessing <- -1*logLikGuessing(df, numItemsInStream)
   bestEstimate$valGuessing <- negLogLikGuessing
+
+  negLogLikMixture <-  bestEstimate$val
+  print(cat("negLogLikGuessing=",negLogLikGuessing," negLogLikMixture=",negLogLikMixture))
+  pval <- likelihoodRatioTest(-1*negLogLikMixture,-1*negLogLikGuessing,3) #takes positive log likelihoods
+  bestEstimate$pLRtest <- pval
 
   return( bestEstimate )
 }
@@ -89,8 +89,12 @@ analyzeOneCondition<- function(df, numItemsInStream, paramBounds, nReplicates=3)
 #' @export
 analyzeOneConditionDF<- function(df, numItemsInStream, paramBounds, nReplicates=3) {
   fitList<- analyzeOneCondition(df, numItemsInStream, paramBounds, nReplicates=3)
-  #to make into dataframe, will take only the first warning
-  fitList$warnings <- fitList$warnings[1]
+
+  #To make into dataframe, can take only the first warning
+  #And I think I have to change to string from possibly being simpleWarning object, otherwise I've gotten error:
+  # "cannot coerce class "c("simpleWarning", "warning", "condition")" to a data.frame"
+  fitList$warnings <- toString( fitList$warnings[1] )
+
   asDataFrame<- data.frame(fitList)
   #asDataFrame<- data.frame(efficay=fitList[1], latency=fitList[2], precision=fit[3], val=fit$value, warnings="None")
   return( asDataFrame  )

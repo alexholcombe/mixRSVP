@@ -20,7 +20,7 @@ calc_curves_dataframes<- function(df,minSPE,maxSPE,numItemsInStream) {
   if ( "efficacy" %in% names(df) ) { #user supplied efficacy, latency, precision
     efficacy<- df$efficacy[1]
     latency<- df$latency[1]; precision<- df$precision[1]
-    if ( "val" %in% names(df) ) { #likelihood, preserve
+    if ( "val" %in% names(df) ) { #negLogLikelihood, preserve
       val <- df$val[1]
       valAvailable<-TRUE
     }
@@ -42,6 +42,11 @@ calc_curves_dataframes<- function(df,minSPE,maxSPE,numItemsInStream) {
                        guessingFreq=guessingThis)
   if (valAvailable) {
     curveDfs$val<- val
+    if (exists('estimates')) {
+      curveDfs$warnings <- estimates$warnings
+      curveDfs$pLRtest <- estimates$pLRtest
+      curveDfs$valGuessing <- estimates$valGuessing
+    }
   }
   #Calculate Gaussian and sum
   #Need the quantized Gaussian

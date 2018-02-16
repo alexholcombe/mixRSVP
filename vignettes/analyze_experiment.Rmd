@@ -105,7 +105,7 @@ library(dplyr)
 dg<- merge(df,estimates) 
 
 curves<- dg %>% group_by_at(.vars = condtnVariableNames) %>% 
-  do(calc_curves_dataframes(.,minSPE,maxSPE,numItemsInStream))
+  do(calc_curves_dataframe(.,minSPE,maxSPE,numItemsInStream))
 
 ```
 
@@ -152,8 +152,8 @@ g<-g + geom_text(data=curves,aes(x=-9,y=y, label = paste("-logLik==", round(val,
   geom_text(data=curves,aes(x=-7,y=y-7, label = paste("mu==", round(latency,2), sep = "")),  parse = TRUE,size=fontSz)+
   geom_text(data=curves,aes(x=-7,y=y-10, label = paste("sigma==", round(precision,2), sep = "")),  parse = TRUE,size=fontSz)
 g<-g + 
-  geom_text(data=curveDfs,aes(x=-9,y=y-10, label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
-  geom_text(data=curveDfs, aes(x=-7, y=y-12, label = paste("p==",round(pLRtest,3), sep="")),parse=TRUE,hjust="left")
+  geom_text(data=curves,aes(x=-9,y=y-10, label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
+  geom_text(data=curves, aes(x=-7, y=y-12, label = paste("p==",round(pLRtest,3), sep="")),parse=TRUE,hjust="left")
 
 show(g)
 ```

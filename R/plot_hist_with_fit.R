@@ -1,4 +1,19 @@
 
+annotate_fit <- function(g,curvesDf) {
+
+  yLimMax<-layer_scales(g)$y$range$range[2]
+  y<-yLimMax*.8
+  g<-g+
+    geom_text(data=curvesDf,aes(x=-7,y=y, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse=TRUE,hjust="left") +
+    geom_text(data=curvesDf,aes(x=-7,y=y-4, label = paste("mu==", round(latency,2), sep = "")),  parse=TRUE,hjust="left")+
+    geom_text(data=curvesDf,aes(x=-7,y=y-7, label = paste("sigma==", round(precision,2), sep = "")), parse=TRUE,hjust="left")
+  if ( "pLRtest" %in% names(curvesDf) ) {
+    g<-g + geom_text(data=curvesDf,aes(x=-7,y=y-12, label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
+       geom_text(data=curvesDf, aes(x=-7, y=y-14, label = paste("p==",round(pLRtest,3), sep="")),parse=TRUE,hjust="left")
+  }
+  return (g)
+}
+
 #' Plot histogram with fitted curve
 #'
 #' @import ggplot2
@@ -21,13 +36,13 @@ plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,
   assertthat::assert_that(length(df) > 0)
 
   #calculate curves (predicted heights of bins for each component and combination of components
-  curveDfs<- calc_curves_dataframes(df,minSPE,maxSPE,numItemsInStream) #this also does the parameter estimation
+  curvesDf<- calc_curves_dataframe(df,minSPE,maxSPE,numItemsInStream) #this also does the parameter estimation
 
   if (plotContinuousGaussian) {
     #Calculate continuous fitted Gaussian, not discrete version.
     grain<-.05
     numObservations<- length(df$SPE)
-    gaussianThis<- gaussian_scaled(curveDfs$efficacy[1],curveDfs$latency[1],curveDfs$precision[1],
+    gaussianThis<- gaussian_scaled(curvesDf$efficacy[1],curvesDf$latency[1],curvesDf$precision[1],
                                          numObservations,minSPE,maxSPE,grain)
   }
 
@@ -38,21 +53,12 @@ plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,
   if (plotContinuousGaussian) {
     g<-g + geom_line(data=gaussianThis,aes(x=x,y=gaussianFreq),color="darkblue",size=1.2)
   }
-  g<-g+ geom_line(data=curveDfs,aes(x=x,y=guessingFreq),color="yellow",size=1.2)
-  g<-g+ geom_line(data=curveDfs,aes(x=x,y=gaussianFreq),color="lightblue",size=1.2)
-  g<-g+ geom_point(data=curveDfs,aes(x=x,y=combinedFitFreq),color="green",size=1.2)
+  g<-g+ geom_line(data=curvesDf,aes(x=x,y=guessingFreq),color="yellow",size=1.2)
+  g<-g+ geom_line(data=curvesDf,aes(x=x,y=gaussianFreq),color="lightblue",size=1.2)
+  g<-g+ geom_point(data=curvesDf,aes(x=x,y=combinedFitFreq),color="green",size=1.2)
 
   if (annotateIt) {
-    yLimMax<-layer_scales(g)$y$range$range[2]
-    y<-yLimMax*.75
-    g<-g+
-      geom_text(data=curveDfs,aes(x=-7,y=y, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse=TRUE,hjust="left") +
-      geom_text(data=curveDfs,aes(x=-7,y=y-4, label = paste("mu==", round(latency,2), sep = "")),  parse=TRUE,hjust="left")+
-      geom_text(data=curveDfs,aes(x=-7,y=y-7, label = paste("sigma==", round(precision,2), sep = "")), parse=TRUE,hjust="left")
-    if ( "pLRtest" %in% names(curveDfs) ) {
-      g<-g + geom_text(data=curveDfs,aes(x=-7,y=y-12, label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
-           geom_text(data=curveDfs, aes(x=-7, y=y-14, label = paste("p==",round(pLRtest,3), sep="")),parse=TRUE,hjust="left")
-    }
+    g<- annotate_fit(g,curvesDf) #assumes curvesDf includes efficacy,latency,precision
   }
   if (missing(showIt)) {
     showIt = TRUE

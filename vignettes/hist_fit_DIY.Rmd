@@ -46,7 +46,7 @@ df<-data %>% dplyr::filter(subject=="BE")
 
 library(mixRSVP)
 #Accomplish same as plotHistWithFit functionality
-curveDfs<- calc_curves_dataframes(df,minSPE,maxSPE,numItemsInStream)
+curveDfs<- calc_curves_dataframe(df,minSPE,maxSPE,numItemsInStream)
 
 g=ggplot(df, aes(x=SPE)) + theme_apa()
 #plot data

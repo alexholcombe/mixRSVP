@@ -18,6 +18,9 @@ calc_curves_dataframes<- function(df,minSPE,maxSPE,numItemsInStream) {
 
   valAvailable<-FALSE
   if ( "efficacy" %in% names(df) ) { #user supplied efficacy, latency, precision
+    if (length(unique(df$efficacy[1])) > 1) {
+      warning( "Seems you sent data for multiple conditions - using the efficacy of the first row")
+    }
     efficacy<- df$efficacy[1]
     latency<- df$latency[1]; precision<- df$precision[1]
     if ( "val" %in% names(df) ) { #negLogLikelihood, preserve

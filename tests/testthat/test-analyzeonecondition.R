@@ -28,17 +28,18 @@ test_that("Low-efficacy case", {
   data$letterSeq<- NULL
   BA22 <- data %>% dplyr::filter(subject=="BA" & target==2 & condition==2)
   #Rather low efficacy dataset
+  set.seed(1) # Reproducibility
   estimates<- analyzeOneCondition(BA22,numItemsInStream,parameterBounds())
 
-  expect_that( estimates$warnings[1] == "None" )
+  expect_equal( estimates$warnings[1], "None" )
 
   #Check estimates are what I expect
   expectedParamEstimates<- c(.28,.07,.75)
   discrepancy <- unlist( estimates[1:3] ) - expectedParamEstimates
   discrepancyLow <- all( abs( discrepancy ) < .1 )
-  expect_that( discrepancyLow, is_true() )
+  expect_true( discrepancyLow )
 
-  expect_that( estimates$pLRtest < 1e-100 ) #efficacy only .28 but still passes likelihood ratio test with flying colors
+  expect_true( estimates$pLRtest < 1e-07 ) #efficacy only .28 but still passes likelihood ratio test with flying colors
 }
 )
 
@@ -57,9 +58,10 @@ test_that("can combine results of analyzeOneConditionDf into dataframe", {
   #But need a better case where warnings returned
   BA2 <- data %>% dplyr::filter(subject=="BA" & target==2) # & condition==2)
 
-  estimates<- BA2 %>%
+  expect_output( BA2 %>%
     group_by_(.dots = condtnVariableNames) %>%  #.dots needed when you have a variable containing multiple factor names
       do(  analyzeOneConditionDF(.,numItemsInStream,parameterBounds(), nReplicates=1)  )
+  )
 })
 
 

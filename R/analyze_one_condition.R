@@ -68,7 +68,7 @@ analyzeOneCondition<- function(df, numItemsInStream, paramBounds, nReplicates=3)
   bestEstimate$valGuessing <- negLogLikGuessing
 
   negLogLikMixture <-  bestEstimate$val
-  print(cat("negLogLikGuessing=",negLogLikGuessing," negLogLikMixture=",negLogLikMixture))
+  #print(cat("negLogLikGuessing=",negLogLikGuessing," negLogLikMixture=",negLogLikMixture))
   pval <- likelihoodRatioTest(-1*negLogLikMixture,-1*negLogLikGuessing,3) #takes positive log likelihoods
   bestEstimate$pLRtest <- pval
 

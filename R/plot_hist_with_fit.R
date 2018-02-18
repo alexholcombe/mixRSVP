@@ -25,7 +25,7 @@ annotate_fit <- function(g,curvesDf) {
       if ( "mixSig" %in% names(curvesDf)) {
         g<- g + geom_text(data=curvesDf,x=x, y=ys[5],
                       aes(label = paste("p==",round(pLRtest,5), sep=""),color=mixSig), parse=TRUE,hjust="left")
-        g<- g + scale_color_manual(values=c("forestgreen","red")) + guides(color=FALSE) #set colors and remove legend
+        g<- g + scale_color_manual(values=c("forestgreen","red")) + guides(color=FALSE) #set colors and remove legend`
       }
   }
   return (g)
@@ -75,9 +75,8 @@ plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,
   g<-g+ geom_point(data=curvesDf,aes(x=x,y=combinedFitFreq),color="green",size=1.2)
 
   if (annotateIt) {
-    #mixSig - whether mixture model statisticallty significantly better than guessing
+    #mixSig - whether mixture model statistically significantly better than guessing
     curvesDf <- dplyr::mutate(curvesDf, mixSig = ifelse(pLRtest <= .05, TRUE, FALSE))
-    #curvesDf$mixSig<- as.factor(curvesDf$mixSig)
     g<- annotate_fit(g,curvesDf) #assumes curvesDf includes efficacy,latency,precision
   }
   if (missing(showIt)) {

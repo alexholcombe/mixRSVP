@@ -87,9 +87,9 @@ head(estimates)
 ```
 
 
-Plot all data with fits (actually a subset so that vignette execution doesn't take too long). 
+Plot data with fits. 
 
-I think you can't put it all into a single plot by calling plot_hist_with_fit multiple times because it returns a plot object, then would have to use grid or something to combine the plots.
+I think you can't put it all into a single plot by calling plot_hist_with_fit multiple times because it returns a plot object, then would have to use grid to combine the plots.
 
 So, the method here is to calculate the fitted curves separately and then add them on. There should be a more integrated way to do that but then it might be harder to probe when fits go wrong?
 
@@ -145,6 +145,8 @@ g<-g+ geom_line(data=curves,aes(x=x,y=gaussianFreq),color="lightblue",size=sz)
 
 numGroups<- nrow(dfGroups) # length(table(df$orientation,df$subject,df$stream)) #try nrow(dfGroups)
 fontSz = 3 #100/numGroups
+#mixSig - whether mixture model statistically significantly better than guessing
+curves <- dplyr::mutate(curves, mixSig = ifelse(pLRtest <= .05, TRUE, FALSE)) #annotate_fit uses this to color the p-value
 g<- annotate_fit(g,curves) #assumes curvesDf includes efficacy,latency,precision
 show(g)
 # 

@@ -148,6 +148,10 @@ fontSz = 3 #100/numGroups
 #mixSig - whether mixture model statistically significantly better than guessing
 curves <- dplyr::mutate(curves, mixSig = ifelse(pLRtest <= .05, TRUE, FALSE)) #annotate_fit uses this to color the p-value
 g<- annotate_fit(g,curves) #assumes curvesDf includes efficacy,latency,precision
+#Somehow the which mixSig (TRUE or FALSE) is red and which green is flipped relative to plot_hist_with_fit even though
+#identical commands are used. I haven't been able to work out why.
+g<- g + scale_color_manual(values=c("red","forestgreen"))  
+
 show(g)
 # 
 # yLimMax<-layer_scales(g)$y$range$range[2]

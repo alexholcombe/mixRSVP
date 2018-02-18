@@ -27,7 +27,7 @@ df.diff = 3  #this is not the number of free parameters, rather
 #Why does he use base - full instead of full - base
 
 #Lower p-value means the base model is less likely.
-pchisq(as.numeric(like.diff) * 2, df=df.diff, lower.tail=F)
+stats::pchisq(as.numeric(like.diff) * 2, df=df.diff, lower.tail=F)
 
 
 #Based on https://stats.stackexchange.com/questions/155474/r-why-does-lrtest-not-match-anovatest-lrt

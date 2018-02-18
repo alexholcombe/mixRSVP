@@ -26,7 +26,7 @@ df.diff = base$df.residual - full$df.residual #this is not the number of free pa
 #Why does he use base - full instead of full - base
 
 #Lower p-value means the base model is less likely.
-pchisq(as.numeric(like.diff) * 2, df=df.diff, lower.tail=F)
+stats::pchisq( as.numeric(like.diff) * 2, df=df.diff, lower.tail=F )
 
 # Anova
 anova(base, full, test="LRT")

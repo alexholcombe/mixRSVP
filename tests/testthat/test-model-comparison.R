@@ -35,7 +35,7 @@ test_that("simplest ground truth", {
   #Why does he use base - full instead of full - base
 
   #Lower p-value means the base model is less likely.
-  p<- pchisq(as.numeric(like.diff) * 2, df=df.diff, lower.tail=F)
+  p<- stats::pchisq(  as.numeric(like.diff) * 2, df=df.diff, lower.tail=F  )
 
   #.027 is the p-value I got when first programming it
   expect_equal( p, .027, tolerance = .001)
@@ -43,7 +43,7 @@ test_that("simplest ground truth", {
   #When df.diff is greater (more parameters in the full model), p-value should be higher
   #because full model has more parameters so should be penalized
   df.diff = df.diff + 1
-  p2<- pchisq(as.numeric(like.diff) * 2, df=df.diff, lower.tail=F)
+  p2<- stats::pchisq(  as.numeric(like.diff) * 2, df=df.diff, lower.tail=F   )
   expect_true( p2 - p > 0)
 } )
 

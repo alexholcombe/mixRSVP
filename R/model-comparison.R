@@ -21,6 +21,6 @@ likelihoodRatioTest <- function(logLikFull,logLikBase, n.params.diff)
   #Why does he use base - full instead of full - base
 
   #Lower p-value means the base model is less likely.
-  probDataGivenNull <- pchisq(as.numeric(like.diff) * 2, df=n.params.diff, lower.tail=F)
+  probDataGivenNull <- stats::pchisq(  as.numeric(like.diff) * 2, df=n.params.diff, lower.tail=F  )
   return (probDataGivenNull)
 }

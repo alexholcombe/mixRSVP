@@ -30,3 +30,6 @@ g
 
 #####
 #See https://stackoverflow.com/questions/48820489/force-evaluation-to-static-value-of-variable-passed-to-aes for a cool solution
+
+
+### Programmatically set text color

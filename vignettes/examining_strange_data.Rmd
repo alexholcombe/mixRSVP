@@ -23,7 +23,6 @@ knitr::opts_chunk$set(
 Read in the data.
 ```{r}
 
-#in the future need to move this data maybe from tests directory because meant to be only for tests
 data <- backwards2_E1 #.mat file been preprocessed into melted long dataframe
 numItemsInStream<- length( data$letterSeq[1,] )  
 

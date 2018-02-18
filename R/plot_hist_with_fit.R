@@ -24,7 +24,7 @@ annotate_fit <- function(g,curvesDf) {
       #add color for p-value
       if ( "mixSig" %in% names(curvesDf)) {
         g<- g + geom_text(data=curvesDf,x=x, y=ys[5],
-                      aes(label = paste("p==",round(pLRtest,5), sep=""),color=mixSig), parse=TRUE,hjust="left")
+                          aes(label = paste0("p",format.pval(pLRtest,3,eps=.001)), color=mixSig), parse=FALSE,hjust="left")
         #colorMapping <- c("FALSE" = "red", "TRUE" = "forestgreen")
         #g<- g + scale_color_manual(values = colorMapping) + guides(color=FALSE) #set colors and remove legend`
 

@@ -50,7 +50,7 @@ Plot the histogram and fit for one subject*condition*stream. This is basically a
 
 For goodness of fit, lower neg log likelihood means better fit.
 
-```{r plotOneS, echo=FALSE, message=FALSE}
+```{r plotOneS, echo=FALSE, message=FALSE, fig.cap = "Fitted guessing distribution in yellow, discretized Gaussian in light blue, combined in green, dark blue is continuous Gaussian"}
 
 dCB<- dplyr::filter(data,subject=="BS",orientation=="Inverted",stream=="Left")  
 minSPE<- -17; maxSPE<- 17
@@ -67,7 +67,8 @@ Fit mixture model to whole dataset (actually a subset so that vignette execution
 
 condtnVariableNames <- c("subject","orientation", "stream") # 
 
-df<- data %>% dplyr::filter(subject<="AG")
+#there are twenty-some subjects, but analysing all would make the vignette far too long to build
+df<- data %>% dplyr::filter(subject>="AE",subject<="AG") #Includes one or two who fail the likelihood ratio test, for illustration
 
 #Check whether already have parameter estimates or instead need to do it
 calculate<-FALSE
@@ -96,12 +97,12 @@ So, the method here is to calculate the fitted curves separately and then add th
 
 First calculate the fitted curves.
 
-```{r, echo=FALSE, message=TRUE, fig.height=36, fig.width=10}
+```{r, echo=FALSE, message=TRUE, fig.height=18, fig.width=10}
 #want fig.height of 10 per subject
 
 library(dplyr)
 
-#Add R parameter estimates to dataframe
+#Add R parameter estimates to dataframe. That way calc_curves_dataframe won't have to refit the data.
 dg<- merge(df,estimates) 
 
 curves<- dg %>% group_by_at(.vars = condtnVariableNames) %>% 
@@ -126,11 +127,12 @@ gaussFine<- estimates %>% group_by_at(.vars = condtnVariableNames) %>% do(
   gaussian_scaled_from_df(.,minSPE,maxSPE,grain) )
 ```
 
-```{r, echo=FALSE, message=TRUE, fig.height=36, fig.width=10, fig.cap = "Left target (first column) and right target (second column). Each subject gets two rows, one for upright letter trials, one for inverted letter trials."}
+```{r, echo=FALSE, message=TRUE, fig.height=26, fig.width=10, fig.cap = "Left target (first column) and right target (second column). Each subject gets two rows, one for upright letter trials, one for inverted letter trials."}
 
 #PLOT EVERYTHING
 g=ggplot(dg, aes(x=SPE)) + facet_grid(subject+orientation~stream) #,  scales="free_y")
 g<-g+geom_histogram(binwidth=1,color="grey90") + xlim(minSPE,maxSPE)
+g<-g+ geom_text(x=12, y= 33, aes(label = subject)) #inset subject name/number
 g<-g +theme_apa() #+theme(panel.grid.minor=element_blank(),panel.grid.major=element_blank())# hide all gridlines.
 #g<-g+ theme(line=element_blank(), panel.border = element_blank())
 sz=.8
@@ -143,6 +145,7 @@ g<-g+ geom_line(data=curves,aes(x=x,y=guessingFreq),color="yellow",size=sz)
 #Discretized Gaussian
 g<-g+ geom_line(data=curves,aes(x=x,y=gaussianFreq),color="lightblue",size=sz)
 
+
 numGroups<- nrow(dfGroups) # length(table(df$orientation,df$subject,df$stream)) #try nrow(dfGroups)
 fontSz = 3 #100/numGroups
 #mixSig - whether mixture model statistically significantly better than guessing
@@ -153,16 +156,5 @@ g<- annotate_fit(g,curves) #assumes curvesDf includes efficacy,latency,precision
 g<- g + scale_color_manual(values=c("red","forestgreen"))  
 
 show(g)
-# 
-# yLimMax<-layer_scales(g)$y$range$range[2]
-# y<-yLimMax*.75 #for text annotation
-# g<-g + geom_text(data=curves,aes(x=-9,y=y, label = paste("-logLik==", round(val,1), sep = "")),  parse = TRUE,size=fontSz) +
-#   geom_text(data=curves,aes(x=-7,y=y-4, label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse = TRUE,size=fontSz) +
-#   geom_text(data=curves,aes(x=-7,y=y-7, label = paste("mu==", round(latency,2), sep = "")),  parse = TRUE,size=fontSz)+
-#   geom_text(data=curves,aes(x=-7,y=y-10, label = paste("sigma==", round(precision,2), sep = "")),  parse = TRUE,size=fontSz)
-# g<-g + 
-#   geom_text(data=curves,aes(x=-9,y=y-10, label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left") +
-#   geom_text(data=curves, aes(x=-7, y=y-12, label = paste("p==",round(pLRtest,3), sep="")),parse=TRUE,hjust="left")
 
-show(g)
 ```

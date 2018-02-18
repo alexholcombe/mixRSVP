@@ -56,7 +56,12 @@ g<-g+ geom_line(data=curvesDf,aes(x=x,y=guessingFreq),color="yellow",size=1.2)
 h<-g+ geom_line(data=curvesDf,aes(x=x,y=gaussianFreq),color="lightblue",size=1.2)
 h<-h+ geom_point(data=curvesDf,aes(x=x,y=combinedFitFreq),color="green",size=1.2)
 h
-#Alternatively plot finer-grained (finer than histogram bins) theoretical Gaussian, in dark blue.
+
+```
+
+Alternatively plot finer-grained (finer than histogram bins) theoretical Gaussian, in dark blue. That can mislead however about the quality of the fit to the bins, which reflects integration under the curve for each bin.
+
+```{r, fig.show='hold', fig.cap = "Fitted guessing distribution in yellow, gaussian in light blue, combined in green"}
 
 #   estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
 efficacy<- curvesDf$efficacy[1]; latency<- curvesDf$latency[1]; precision<- curvesDf$precision[1]
@@ -68,13 +73,6 @@ gaussianThis<- gaussian_scaled(efficacy,latency,precision,numObservations,minSPE
 g<-g + geom_line(data=gaussianThis,aes(x=x,y=gaussianFreq),color="darkblue",size=1.2)
 g<- annotate_fit(g,curvesDf) #assumes curvesDf includes efficacy,latency,precision
 g
-```
-
-#Alternatively plot finer-grained (finer than histogram bins) theoretical Gaussian, in dark blue.
-
-```{r, fig.show='hold', fig.cap = "Fitted guessing distribution in yellow, gaussian in light blue, combined in green"}
-
-
 
 ```
 

@@ -1,3 +1,4 @@
+
 #' Annotate histogram with parameter vals and stats
 #' Returns the ggplot object you passed it, but annotated.
 #' @import ggplot2 dplyr methods
@@ -9,6 +10,23 @@
 #'
 #'
 annotate_fit <- function(g,curvesDf) {
+
+  format.p <- function(p, precision=0.001) {
+    #This is much loke format.pval but avoids scientific notation and adds an equal if no less-than applies
+    digits <- -log(precision, base=10)
+    ptext <- formatC(p, format='f', digits=digits)
+
+    ptext[ptext == formatC(0, format='f', digits=digits)] <- paste0('<', precision)
+    #if "<" has not been put in the string, insert "="
+    if (startsWith(ptext,"0")[1]) { #because "<" has not been prepended, is something like "0.303"
+      #Warning tells me that sometimes result of startsWith has length greater than 1 but I don't know why.
+      #It gets sent 35 copies just for one hist. I think it's writing one copy of the text for each data point
+      ptext <- paste0("=",ptext)  # ptext[1] <- "="  #This won't work because only sets the first one, but there are 35
+    }
+    #ppp<-ptext
+    #print(paste0("ptext at end=",ptext))
+    ptext
+  }
 
   x <- layer_scales(g)$x$range$range[1] + 3 #xlim minimum
   yLimMax<- layer_scales(g)$y$range$range[2]
@@ -24,7 +42,9 @@ annotate_fit <- function(g,curvesDf) {
       #add color for p-value
       if ( "mixSig" %in% names(curvesDf)) {
         g<- g + geom_text(data=curvesDf,x=x, y=ys[5],
-                          aes(label = paste0("p",format.pval(pLRtest,3,eps=.001)), color=mixSig), parse=FALSE,hjust="left")
+                          aes(label = paste0("p",format.p(pLRtest)), color=mixSig), parse=FALSE,hjust="left")
+        #g<- g + geom_text(data=curvesDf,x=x, y=ys[5],
+        #                  aes(label = paste0("p=",format.pval(pLRtest,3,eps=.001)), color=mixSig), parse=FALSE,hjust="left")
         #colorMapping <- c("FALSE" = "red", "TRUE" = "forestgreen")
         #g<- g + scale_color_manual(values = colorMapping) + guides(color=FALSE) #set colors and remove legend`
 
@@ -79,6 +99,8 @@ plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,
 
   if (annotateIt) {
     #mixSig - whether mixture model statistically significantly better than guessing
+    #to avoid writing the text one time for each data point, cut to one trial per condition
+    forTextDf<- curvesDf[1,] #only need one x-value (SPE), each one has the same efficacy latency etc.
     curvesDf <- dplyr::mutate(curvesDf, mixSig = ifelse(pLRtest <= .05, TRUE, FALSE))
     g<- annotate_fit(g,curvesDf) #assumes curvesDf includes efficacy,latency,precision
   }

@@ -1,5 +1,7 @@
 context("test-plot_hist_with_fit.R")
 
+#To testthat, run test_file("tests/testthat/test-plot_hist_with_fit.R") or RStudio:Build:Test Package
+
 test_that("executes", {
   data <- backwards2_E1 #.mat file been preprocessed into melted long dataframe
   numItemsInStream<- length( data$letterSeq[1,] )
@@ -19,7 +21,8 @@ test_that("executes", {
   minSPE<- -17; maxSPE<- 17
 
   # BE,2,1
-  df<- data %>% dplyr::filter(subject=="BE" & stream=="Right" & orientation=="Canonical")
+  #df<- data %>% dplyr::filter(subject=="BE" & stream=="Right" & orientation=="Canonical")
+  df<- data %>% dplyr::filter(subject=="AF" & stream=="Right" & orientation=="Canonical")
   #estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
   #curvesDf <- dplyr::mutate(curvesDf, pvalColor = ifelse(pLRtest <= .05, "green", "red"))
 

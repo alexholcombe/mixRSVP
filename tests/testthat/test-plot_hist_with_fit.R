@@ -2,6 +2,7 @@ context("test-plot_hist_with_fit.R")
 
 #To testthat, run test_file("tests/testthat/test-plot_hist_with_fit.R") or RStudio:Build:Test Package
 
+
 test_that("executes", {
   data <- backwards2_E1 #.mat file been preprocessed into melted long dataframe
   numItemsInStream<- length( data$letterSeq[1,] )

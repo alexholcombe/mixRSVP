@@ -130,7 +130,7 @@ Plot everything
 
 g=ggplot(dg, aes(x=SPE)) + facet_grid(subject+orientation~stream) #,  scales="free_y")
 g<-g+geom_histogram(binwidth=1,color="grey90") + xlim(minSPE,maxSPE)
-g<-g+ geom_text(x=12, y= 33, aes(label = subject)) #inset subject name/number
+g<-g+ geom_text(x=12, y= 33, aes(label = subject)) #inset subject name/number. Unfortunately it overwrites itself a million times
 g<-g +theme_apa() #+theme(panel.grid.minor=element_blank(),panel.grid.major=element_blank())# hide all gridlines.
 #g<-g+ theme(line=element_blank(), panel.border = element_blank())
 sz=.8

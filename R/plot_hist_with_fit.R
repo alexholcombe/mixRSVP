@@ -45,7 +45,7 @@ annotate_fit <- function(g,curvesDf) {
   #to avoid writing the text one time for each data point, cut to one trial per condition
   #textDf<- curvesDf[1,] #only need one x-value (SPE), each one has the same efficacy latency etc. But then only works for first plot
   #Need to keep one x from each condition, but don't know variables whose combinations define the conditions
-  textDf<- curvesDf
+  textDf<- dplyr::filter(curvesDf,x==0) #assume each condition has 1 instance of SPE=0. Otherwise will crash.
   textDf <- dplyr::mutate(textDf, mixSig = ifelse(pLRtest <= .05, TRUE, FALSE))
 
 

@@ -1,3 +1,29 @@
+#' Format a p-value appropriately.
+#' with < precision if small enough, otherwise = p
+#'
+#' @param p The p-value to format
+#' @return a string
+#' @export
+#'
+#'
+format_p <- function(p, precision=0.001) {
+  #It seems format.p needs to be exported (in roxygen comment above) because it seems to be "lost" otherwise when leavel local environment and ggplot object re-built
+  #This is much like format.pval but avoids scientific notation and adds an equal if no less-than applies
+  digits <- -log(precision, base=10)
+  ptext <- formatC(p, format='f', digits=digits)
+
+  ptext[ptext == formatC(0, format='f', digits=digits)] <- paste0('<', precision)
+  #if "<" has not been put in the string, insert "="
+  if (startsWith(ptext,"0")[1]) { #because "<" has not been prepended, is something like "0.303"
+    #Warning tells me that sometimes result of startsWith has length greater than 1 but I don't know why.
+    #It gets sent 35 copies just for one hist. I think it's writing one copy of the text for each data point
+    ptext <- paste0("=",ptext)  # ptext[1] <- "="  #This won't work because only sets the first one, but there are 35
+    #print("inserted =")
+  }
+  #ppp<-ptext
+  #print(paste0("ptext at end=",ptext))
+  ptext
+}
 
 #' Annotate histogram with parameter vals and stats
 #' Returns the ggplot object you passed it, but annotated.
@@ -11,22 +37,15 @@
 #'
 annotate_fit <- function(g,curvesDf) {
 
-  format.p <- function(p, precision=0.001) {
-    #This is much loke format.pval but avoids scientific notation and adds an equal if no less-than applies
-    digits <- -log(precision, base=10)
-    ptext <- formatC(p, format='f', digits=digits)
+  #It seems that for this function to find format.p when called from the top-level environment, format.p has to be part of it.
+  #Yet when it is called by plot_hist_with_fit, it doesn't!
 
-    ptext[ptext == formatC(0, format='f', digits=digits)] <- paste0('<', precision)
-    #if "<" has not been put in the string, insert "="
-    if (startsWith(ptext,"0")[1]) { #because "<" has not been prepended, is something like "0.303"
-      #Warning tells me that sometimes result of startsWith has length greater than 1 but I don't know why.
-      #It gets sent 35 copies just for one hist. I think it's writing one copy of the text for each data point
-      ptext <- paste0("=",ptext)  # ptext[1] <- "="  #This won't work because only sets the first one, but there are 35
-    }
-    #ppp<-ptext
-    #print(paste0("ptext at end=",ptext))
-    ptext
-  }
+
+  #mixSig - whether mixture model statistically significantly better than guessing
+  #to avoid writing the text one time for each data point, cut to one trial per condition
+  textDf<- curvesDf[1,] #only need one x-value (SPE), each one has the same efficacy latency etc.
+  textDf <- dplyr::mutate(textDf, mixSig = ifelse(pLRtest <= .05, TRUE, FALSE))
+
 
   x <- layer_scales(g)$x$range$range[1] + 3 #xlim minimum
   yLimMax<- layer_scales(g)$y$range$range[2]
@@ -34,15 +53,15 @@ annotate_fit <- function(g,curvesDf) {
   ySpaceToOccupy <- y/2
   ys<- seq(y,y-ySpaceToOccupy,length.out=5)
   g<-g+
-    geom_text(data=curvesDf, x=x, y= ys[1], aes(label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse=TRUE,hjust="left")+
-    geom_text(data=curvesDf, x=x, y= ys[2], aes(label = paste("mu==", round(latency,2), sep = "")),  parse=TRUE,hjust="left")+
-    geom_text(data=curvesDf, x=x, y= ys[3], aes(label = paste("sigma==", round(precision,2), sep = "")), parse=TRUE,hjust="left")
-    if ( "pLRtest" %in% names(curvesDf) ) {
-      g<-g + geom_text(data=curvesDf,x=x-1,y=ys[4],aes(label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left")
+    geom_text(data=textDf, x=x, y= ys[1], aes(label = paste("plain(e)==", round(efficacy,2), sep = "")),  parse=TRUE,hjust="left")+
+    geom_text(data=textDf, x=x, y= ys[2], aes(label = paste("mu==", round(latency,2), sep = "")),  parse=TRUE,hjust="left")+
+    geom_text(data=textDf, x=x, y= ys[3], aes(label = paste("sigma==", round(precision,2), sep = "")), parse=TRUE,hjust="left")
+    if ( "pLRtest" %in% names(textDf) ) {
+      g<-g + geom_text(data=textDf,x=x-1,y=ys[4],aes(label = paste("-logLik==", round(val,1), sep = "")), parse=TRUE,hjust="left")
       #add color for p-value
-      if ( "mixSig" %in% names(curvesDf)) {
-        g<- g + geom_text(data=curvesDf,x=x, y=ys[5],
-                          aes(label = paste0("p",format.p(pLRtest)), color=mixSig), parse=FALSE,hjust="left")
+      if ( "mixSig" %in% names(textDf)) {
+        g<- g + geom_text(data=textDf,x=x, y=ys[5],
+                          aes(label = paste0("p",mixRSVP::format_p(pLRtest)), color=mixSig), parse=FALSE,hjust="left")
         #g<- g + geom_text(data=curvesDf,x=x, y=ys[5],
         #                  aes(label = paste0("p=",format.pval(pLRtest,3,eps=.001)), color=mixSig), parse=FALSE,hjust="left")
         #colorMapping <- c("FALSE" = "red", "TRUE" = "forestgreen")
@@ -98,10 +117,7 @@ plot_hist_with_fit<- function(df,minSPE,maxSPE,targetSP,numItemsInStream,
   g<-g+ geom_point(data=curvesDf,aes(x=x,y=combinedFitFreq),color="green",size=1.2)
 
   if (annotateIt) {
-    #mixSig - whether mixture model statistically significantly better than guessing
-    #to avoid writing the text one time for each data point, cut to one trial per condition
-    forTextDf<- curvesDf[1,] #only need one x-value (SPE), each one has the same efficacy latency etc.
-    curvesDf <- dplyr::mutate(curvesDf, mixSig = ifelse(pLRtest <= .05, TRUE, FALSE))
+
     g<- annotate_fit(g,curvesDf) #assumes curvesDf includes efficacy,latency,precision
   }
   if (missing(showIt)) {

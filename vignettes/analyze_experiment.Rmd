@@ -50,7 +50,7 @@ Plot the histogram and fit for one subject*condition*stream. This is basically a
 
 For goodness of fit, lower neg log likelihood means better fit.
 
-```{r plotOneS, echo=FALSE, message=FALSE, fig.cap = "Fitted guessing distribution in yellow, discretized Gaussian in light blue, combined in green, dark blue is continuous Gaussian"}
+```{r plot one subject, echo=FALSE, message=FALSE, fig.cap = "Fitted guessing distribution in yellow, discretized Gaussian in light blue, combined in green, dark blue is continuous Gaussian"}
 
 dCB<- dplyr::filter(data,subject=="BS",orientation=="Inverted",stream=="Left")  
 minSPE<- -17; maxSPE<- 17
@@ -63,7 +63,7 @@ g + annotate("text", x = 12, y = 25, label = "CB, Inverted, Left stream")
 
 Fit mixture model to whole dataset (actually a subset so that vignette execution doesn't take too long).
 
-```{r}
+```{r fit data}
 
 condtnVariableNames <- c("subject","orientation", "stream") # 
 
@@ -87,7 +87,6 @@ if (calculate) {
 head(estimates)
 ```
 
-
 Plot data with fits. 
 
 I think you can't put it all into a single plot by calling plot_hist_with_fit multiple times because it returns a plot object, then would have to use grid to combine the plots.
@@ -97,7 +96,7 @@ So, the method here is to calculate the fitted curves separately and then add th
 
 First calculate the fitted curves.
 
-```{r, echo=FALSE, message=TRUE, fig.height=18, fig.width=10}
+```{r calculate curves, echo=FALSE, message=TRUE, fig.height=18, fig.width=10}
 #want fig.height of 10 per subject
 
 library(dplyr)
@@ -112,8 +111,7 @@ curves<- dg %>% group_by_at(.vars = condtnVariableNames) %>%
 
 Now calculate the number of observations in each condition, which is used for scaling the pseudo-continuous (fine-grained) Gaussian. Then calculate that Gaussian curve.
 
-```{r, echo=FALSE, message=TRUE}
-
+```{r Scale fine-grained Gaussian, echo=FALSE, message=TRUE}
 
 #Calc numObservations to each condition. This is needed only for scaling the fine-grained Gaussian
 #Calc the number of observations for each condition, because gaussianScaledforData needs to know.
@@ -127,9 +125,9 @@ gaussFine<- estimates %>% group_by_at(.vars = condtnVariableNames) %>% do(
   gaussian_scaled_from_df(.,minSPE,maxSPE,grain) )
 ```
 
-```{r, echo=FALSE, message=TRUE, fig.height=26, fig.width=10, fig.cap = "Left target (first column) and right target (second column). Each subject gets two rows, one for upright letter trials, one for inverted letter trials."}
+Plot everything 
+```{r plot everything, echo=FALSE, message=TRUE, fig.height=26, fig.width=10, fig.cap = "Left target (first column) and right target (second column). Each subject gets two rows, one for upright letter trials, one for inverted letter trials."}
 
-#PLOT EVERYTHING
 g=ggplot(dg, aes(x=SPE)) + facet_grid(subject+orientation~stream) #,  scales="free_y")
 g<-g+geom_histogram(binwidth=1,color="grey90") + xlim(minSPE,maxSPE)
 g<-g+ geom_text(x=12, y= 33, aes(label = subject)) #inset subject name/number

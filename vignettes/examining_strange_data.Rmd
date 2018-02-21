@@ -54,13 +54,14 @@ Check troublesome cases.
 ```{r, fig.cap = "Fitted guessing distribution yellow, continuous Gaussian in dark blue, quantized gaussian in light blue, combined in green"}
 
 # BE,2,1
-df<- data %>% dplyr::filter(subject=="BE" & stream=="Right" & orientation=="Canonical") 
+df<- data %>% dplyr::filter(subject=="AF" & stream=="Right" & orientation=="Canonical")
+#df<- data %>% dplyr::filter(subject=="BE" & stream=="Right" & orientation=="Canonical") 
 #estimates<- analyzeOneCondition(df,numItemsInStream,parameterBounds())
 
 g<- plot_hist_with_fit(df,minSPE,maxSPE,df$targetSP,numItemsInStream,plotContinuousGaussian,annotateIt, FALSE)
 library(ggplot2)
-g + annotate("text", x = 12, y = 25, label = "BE, Canonical, Right stream")
-
+g<-g + annotate("text", x = 12, y = 25, label = "BE, Canonical, Right stream")
+show(g)
 ```
 
 Above it appears the efficacy may be too high. Problem is that can fit the histogram very well with a tiny precision.

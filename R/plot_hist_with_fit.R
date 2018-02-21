@@ -38,12 +38,14 @@ format_p <- function(p, precision=0.001) {
 annotate_fit <- function(g,curvesDf) {
 
   #It seems that for this function to find format.p when called from the top-level environment, format.p has to be part of it.
-  #Yet when it is called by plot_hist_with_fit, it doesn't!
+  #Yet when it is called by plot_hist_with_fit, it doesn't! Somehow I fixed this by changing name to format_p
 
 
   #mixSig - whether mixture model statistically significantly better than guessing
   #to avoid writing the text one time for each data point, cut to one trial per condition
-  textDf<- curvesDf[1,] #only need one x-value (SPE), each one has the same efficacy latency etc.
+  #textDf<- curvesDf[1,] #only need one x-value (SPE), each one has the same efficacy latency etc. But then only works for first plot
+  #Need to keep one x from each condition, but don't know variables whose combinations define the conditions
+  textDf<- curvesDf
   textDf <- dplyr::mutate(textDf, mixSig = ifelse(pLRtest <= .05, TRUE, FALSE))
 
 

@@ -1,5 +1,13 @@
 # To-do
 
+*   #to avoid writing the text one time for each data point, would like to cut to one trial per condition, but can't do that without
+  #knowing the grouping variable for the facets
+  #how do I keep one x from each condition? This is basically like stat_summary
+  #See https://stackoverflow.com/questions/15720545/use-stat-summary-to-annotate-plot-with-number-of-observations
+
+  #No, unfortunately stat_summary only gets the numbers, this is the way to do it https://stackoverflow.com/a/46791112/302378
+  Have to create separate dataset and geom_text call to add the annotations
+  
 *  Add   set.seed(1) # Reproducibility
 to everything
 
@@ -31,6 +39,8 @@ The mixture model has 3 degrees of freedom I think (e, u, sigma) and the guessin
     
 
 # Questions
+
+#insanely, format.p cannot be found by annotate_fit call from top environment even when it's within the function defined
 
 * Would be ridiculous to use ggplot2:: everytime invoked that ,but is that the way to get rid of "plot_hist_with_fit: no visible binding for global variable ‘SPE’" ?
 

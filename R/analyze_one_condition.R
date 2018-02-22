@@ -59,7 +59,7 @@ analyzeOneCondition<- function(df, numItemsInStream, paramBounds, nReplicates=3)
   #nReplicates. Number of times to repeat each fit with different starting values. Pat maybe used 100
   # Calculate the domain of possible serial position errors.
 
-  bestEstimate<- fitOneCondition(df, numItemsInStream, paramBounds, nReplicates=3)
+  bestEstimate<- fitOneCondition(df, numItemsInStream, paramBounds, nReplicates)
   answers<-bestEstimate
 
   #Check whether this fits significantly better than guessing distribution
@@ -88,7 +88,7 @@ analyzeOneCondition<- function(df, numItemsInStream, paramBounds, nReplicates=3)
 #'
 #' @export
 analyzeOneConditionDF<- function(df, numItemsInStream, paramBounds, nReplicates=3) {
-  fitList<- analyzeOneCondition(df, numItemsInStream, paramBounds, nReplicates=3)
+  fitList<- analyzeOneCondition(df, numItemsInStream, paramBounds, nReplicates)
 
   #To make into dataframe, can take only the first warning
   #And I think I have to change to string from possibly being simpleWarning object, otherwise I've gotten error:

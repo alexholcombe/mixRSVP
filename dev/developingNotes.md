@@ -1,5 +1,9 @@
 # To-do
 
+* Create simplest possible vignette, to analyze just one condition. Basically filter data and then call analyzeOneCondition
+
+* Does the namespace for annotate()  , ggplot2::annotate somehow get screwed up so you have to specify ggplot2::annotate?
+
 *   #to avoid writing the text one time for each data point, would like to cut to one trial per condition, but can't do that without
   #knowing the grouping variable for the facets
   #how do I keep one x from each condition? This is basically like stat_summary
@@ -8,12 +12,11 @@
   #No, unfortunately stat_summary only gets the numbers, this is the way to do it https://stackoverflow.com/a/46791112/302378
   Have to create separate dataset and geom_text call to add the annotations
   
+* I cast warnings as a character to fix a problem but side effect is getting these messages 
+"Unequal factor levels: coercing to characterbinding character and factor vector, coercing into character vectorbinding character and factor vector"
+
 *  Add   set.seed(1) # Reproducibility
 to everything
-
-* Work out why likelihood ratio test is so lenient
-
-* Write function for annotating with all the parameters, and p-value
 
 * Add inferential stats to analyze_experiment.Rmd vignette
 
@@ -24,7 +27,7 @@ to everything
 
 * Add for the nReplicates parameter roxygen a link to the notes on how many fits are needed for stability 
 
-* add a link somewhere to compareMATLABtoR.html 
+* add a link somewhere, somehow to BackwardsLtrs (Google Drive) E2/compareMATLABtoR.html 
 
 # Stats
 

@@ -29,7 +29,9 @@
 #' @return Area under the bin for a Gaussian distribution with the parameters mean=latency, sigma=precision
 areaUnderGaussianBin<- function(binStart,binWidth,latency,precision) {
   #Calculate area under the unit curve for that bin
-  area <- pnorm(binStart+binWidth,latency,precision) - pnorm(binStart,latency,precision)
+  areaToTopOfBin <- pnorm(binStart+binWidth,latency,precision)
+  areaToBottomOfBin<- pnorm(binStart,latency,precision)
+  area <- areaToTopOfBin - areaToBottomOfBin
   return (area)
 }
 

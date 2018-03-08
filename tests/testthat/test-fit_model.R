@@ -33,6 +33,7 @@ test_that("Check null warning no longer occurs", {
 
 test_that("Decent estimates", {
   df<-readRDS( file.path("..","exampleSubject.Rdata") ) #because dir will be tests/testthat
+  #df<-readRDS( file.path("tests","exampleSubject.Rdata") ) #when working from top level
   #library(dplyr)
   df<- dplyr::filter(df, condition==1 & target==1)
   numItemsInStream<-24
@@ -54,15 +55,15 @@ test_that("Decent estimates", {
 
   #Check that standard fit method gives decent results
   expectedParamEstimates<- c(.84,.48,.99) # c(.37,1.2,.017)  #from L-BFGS-B
-  LBFGSBparams<-  fit["L-BFGS-B",]
-  discrepancy <- LBFGSBparams[1:3] - expectedParamEstimates
-  discrepancyLow <- all( abs( discrepancy ) < .1 )
+  params<-  fit[1:3]
+  discrepancy <- params - expectedParamEstimates
+  discrepancyLow <- all( abs( discrepancy ) < .05 )
   expect_that( discrepancyLow, is_true() )
   #expect_that( roots, equals(-3000.01, tolerance  = 0.1) )
 
   # A kkt1 of True means that the final gradient was close to 0 (the optimizer found an extremum),
   #a kkt2 of True means that the Hessian is positive definite (it's a minimum). Both should be True.
-  expect_that( fit["L-BFGS-B","kkt1"], is_true() ) #means that the final gradient was close to 0 (the optimizer found an extremum)
+  expect_that( fit[1,"kkt1"], is_true() ) #means that the final gradient was close to 0 (the optimizer found an extremum)
 }
 )
 

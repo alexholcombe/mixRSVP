@@ -29,10 +29,37 @@
 #' @return Area under the bin for a Gaussian distribution with the parameters mean=latency, sigma=precision
 areaUnderGaussianBin<- function(binStart,binWidth,latency,precision) {
   #Calculate area under the unit curve for that bin
+  #Do it by determining area of Gaussian up to top of bin and subtracting area up to bottom of bin
+
+  if (precision <0) {#don't know why this happens even when lower bound on precision is specified as zero and
+    #method is set to L-BFGS-B, which is supposed to obey bounds very well.
+    #Will try method bobyqa, which is the other one supposed to obey bounds.
+    warning("You sent me a precision value < 0. That is just crazy.")
+  }
   areaToTopOfBin <- pnorm(binStart+binWidth,latency,precision)
-  areaToBottomOfBin<- pnorm(binStart,latency,precision)
-  area <- areaToTopOfBin - areaToBottomOfBin
-  return (area)
+
+  #I'm seeing a lot of: <simpleWarning in pnorm(binStart, latency, precision): NaNs produced>
+  #happening as a result of "Check null warning no longer occurs" test in test-fit_model.R
+  areaToBottomOfBin <- tryCatch( pnorm(binStart,latency,precision),
+                                 error=function(e) e,
+                                 warning=function(w) return(list(pnorm(binStart,latency,precision),w))
+                       )
+  #If there's a warning, return list with first element the answer and second element the warning
+  if( is(areaToBottomOfBin[2],"warning")  ) {
+    print(paste("Got a warning as a result of calling pnorm with:",binStart,latency,precision))
+  }
+  if( is.nan(areaToBottomOfBin[[1]]) ) {
+    print(paste("Got NaN as a result of calling pnorm with:",binStart,latency,precision))
+    #So a problem is we get Nan with a call like pnorm(13,1,-9e-05) because precision can't be negative
+  }
+  areaToBottom<- areaToBottomOfBin[[1]]
+
+  areaOfBin <- tryCatch(  areaToTopOfBin - areaToBottom,
+            error = function(e) e )
+  if( is(areaOfBin,"error") ) {
+    print("no")
+  }
+  return (areaOfBin)
 }
 
 areaUnderGaussianBinEachObservation<- function(SPEs, mu, sigma) {

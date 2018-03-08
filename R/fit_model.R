@@ -38,10 +38,12 @@ fitModel <- function(SPEs, minSPE, maxSPE, pseudoUniform, parameterGuess, paramB
   #do the fit
   fit <- withWarnings(
                 optimx::optimx(parameterGuess, fn= pdf_mixture_ready_for_optim,
-                  method=c('L-BFGS-B'),
+                  method=c('bobyqa'),  #problem with L-BFGS-B is it somehow ends up sending negative precisions
                   lower=paramBounds$lower, upper=paramBounds$upper,
                   control=ctrl)
            )
+  #WHY DOES it called with precision sometimes a negative number even though bound is zero?
+
   #Replace NULL with None
   fit$warnings[ is.null(fit$warnings) ] <- "None"
   return(fit)

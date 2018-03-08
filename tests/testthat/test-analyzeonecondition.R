@@ -5,6 +5,7 @@ library(dplyr)
 
 test_that("Unproblematic data is fit to right value", {
   df<-readRDS(file.path("..","exampleSubject.Rdata"))
+  #df<-readRDS( file.path("tests","exampleSubject.Rdata") ) #when working from top level
   numItemsInStream<- 24 #because 1 to 24 all present in df$resp]
   bounds <- parameterBounds()
   estimates <- analyzeOneCondition(df, numItemsInStream, bounds)

@@ -1,5 +1,10 @@
 # To-do
 
+* I cast warnings as a character to fix a problem but side effect is getting these messages 
+"Unequal factor levels: coercing to characterbinding character and factor vector, coercing into character vectorbinding character and factor vector"
+
+This can be investigated in test_analyzeOneCondition's test "can combine results of analyzeOneConditionDf into dataframe"
+
 * Create simplest possible vignette, to analyze just one condition. Basically filter data and then call analyzeOneCondition
 
 * Does the namespace for annotate()  , ggplot2::annotate somehow get screwed up so you have to specify ggplot2::annotate?
@@ -12,9 +17,6 @@
   #No, unfortunately stat_summary only gets the numbers, this is the way to do it https://stackoverflow.com/a/46791112/302378
   Have to create separate dataset and geom_text call to add the annotations
   
-* I cast warnings as a character to fix a problem but side effect is getting these messages 
-"Unequal factor levels: coercing to characterbinding character and factor vector, coercing into character vectorbinding character and factor vector"
-
 *  Add   set.seed(1) # Reproducibility
 to everything
 

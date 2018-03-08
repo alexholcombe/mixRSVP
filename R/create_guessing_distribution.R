@@ -24,7 +24,7 @@ createGuessingDistribution <- function(minSPE,maxSPE,targetSP,numItemsInStream) 
   minSPEthisData<- 1 - max(targetSP)
   maxSPEthisData<- numItemsInStream - min(targetSP)
   if (maxSPEthisData > maxSPE) stop(cat("maxSPE must be at least",maxSPEthisData,"based on the values you passed me"))
-  if (minSPEthisData > minSPE) stop(cat("minSPE must be no greater than",minSPEthisData,"based on the values you passed me"))
+  if (minSPEthisData < minSPE) stop(cat("minSPE must be no greater than",minSPEthisData,"based on the values you passed me"))
 
   #For each targetSP, determine all possible SPEs and aggregate across all targetSPs to generate the guessing distribution
   xDomain<- minSPE:maxSPE

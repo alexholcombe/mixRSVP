@@ -1,0 +1,12 @@
+---
+title: "NaN errors when fitting"
+author: "Alex Holcombe"
+date: "6/6/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+"Got NaN as a result of calling pnorm with: 13.5 0.117791633597432 -4.05e-05"

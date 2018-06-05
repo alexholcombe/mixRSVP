@@ -102,7 +102,7 @@ First calculate the fitted curves.
 library(dplyr)
 
 #Add R parameter estimates to dataframe. That way calc_curves_dataframe won't have to refit the data.
-dg<- merge(df,estimates) 
+dg<- merge(df,estimates)
 
 curves<- dg %>% group_by_at(.vars = condtnVariableNames) %>% 
   do(calc_curves_dataframe(.,minSPE,maxSPE,numItemsInStream))

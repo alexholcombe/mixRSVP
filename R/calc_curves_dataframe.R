@@ -16,7 +16,7 @@
 #' calc_curves_dataframe(df, -11, 11, 16)
 #'
 calc_curves_dataframe<- function(df,minSPE,maxSPE,numItemsInStream) {
-  #Calculate dataframes containing the fitted curve, so can plot data and curves at same time
+  #Create dataframes containing the fitted curve, so can plot data and curves at same time
   #User can optionally supply estimates, otherwise need to do the fitting
 
   estimateAvailable<-FALSE
@@ -49,8 +49,28 @@ calc_curves_dataframe<- function(df,minSPE,maxSPE,numItemsInStream) {
   }
   if ( "warnings" %in% names(df) ) {
     curveDf$warnings <- df$warnings[1]
+    print(paste('assigning warning from df',df$warnings[1],'which is type',typeof(df$warnings[1])))
   } else if (estimateAvailable) {
-    curveDf$warnings <- estimate$warnings[1] #Sometimes it's a list, which you can't put into a data frame. [[1]]
+    #Sometimes it's a list of warning, which you can't put into a data frame.
+    #In that case just take the first.
+    theWarning<- estimate$warnings[1]
+    #But when it's an actual warning rather than null [[1]], it will have both a msg and a call field
+    curveDf$warnings <- theWarning
+    if (typeof(theWarning) == "list") {
+      msg<- theWarning$message
+      call<- capture.output(  #the function call that caused the warning
+        print( theWarning[[1]]$call ) #Because print has a method that formats it nicely
+      )
+      msgAndCall<- paste0("message= ",msg,", call= ",call)
+      curveDf$warnings<- msgAndCall
+    }
+    else {
+      curveDf$warnings <- theWarning
+    }
+    print(paste('assigning warning from estimate',estimate$warnings[1],'which is type',typeof(estimate$warnings[1])))
+    if (typeof(estimate$warnings[1]) == "list") {
+      ww<<-estimate$warnings[1]
+    }
   }
   if ( "pLRtest" %in% names(df) ) {
     curveDf$pLRtest <- df$pLRtest[1]

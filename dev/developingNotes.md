@@ -5,6 +5,21 @@
 
 This can be investigated in test_analyzeOneCondition's test "can combine results of analyzeOneConditionDf into dataframe"
 
+analyzeOneConditionDF turned warnings into a string.
+
+###   Column `warnings` can't be converted from character to list
+
+inside calc_curves_dataframe in test-calc_curves_dataframe
+in bind_rows_(x, .id) : 
+  Column `warnings` can't be converted from character to list
+  
+Still getting this error e.g. in inspectHistograms.Rmd in jackie project. Do I have the latest version?  Because what is the relationship to the message given by analyze_experiment.Rmd: " Unequal factor levels: coercing to characterbinding ". I dimly remember that 
+"binding character and factor vector, coercing into character vector"
+
+
+
+### to-do
+
 * Create simplest possible vignette, to analyze just one condition. Basically filter data and then call analyzeOneCondition
 
 * Does the namespace for annotate()  , ggplot2::annotate somehow get screwed up so you have to specify ggplot2::annotate?
@@ -25,7 +40,7 @@ to everything
 * Pesky fitting errors.  Error in grad.default(ufn, ans$par, ...) : 
   function returns NA at 1.4434927002511e-050.000135401581392880.000100001 distance from x. I have started a test to investigate this in test-fit_model.R
 
-* Need to add Pat's quantitative criterion (or similar) to exclude subjects with low efficacy. Have got "excluded field" from his MATLAB fits in backwards2_E1 that I can compare my test with.
+
 
 * Add for the nReplicates parameter roxygen a link to the notes on how many fits are needed for stability 
 
@@ -42,6 +57,7 @@ For comparing guessing only to mixture, Pat did:
 
 The mixture model has 3 degrees of freedom I think (e, u, sigma) and the guessing distrbiutino zero.
     
+* Need to add Pat's quantitative criterion (or similar) to exclude subjects with low efficacy. Have got "excluded field" from his MATLAB fits in backwards2_E1 that I can compare my test with.
 
 # Questions
 

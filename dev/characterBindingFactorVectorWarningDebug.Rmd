@@ -1,0 +1,39 @@
+---
+title: "characterBindingFactorVectorWarningDebug"
+author: "Alex Holcombe"
+output: html_document
+---
+
+At end when all getting bound together,
+
+Error in bind_rows_(x, .id) : 
+  Column `warnings` can't be converted from character to list
+  
+```{r}
+
+library(mixRSVP)
+data <- backwards2_E1 #A dataset provided as an example with the package
+#.mat file been preprocessed into melted long dataframe
+numItemsInStream <- length( data$letterSeq[1,] )  
+library(dplyr)
+
+#To use dplyr operations, each column must be a 1d atomic vector or a list. So, can't have array fields like letterSeq
+data$letterSeq<- NULL
+
+#Give conditions better names than 1 and 2
+names(data)[names(data) == 'target'] <- 'stream'
+data <- data %>% mutate( stream =ifelse(stream==1, "Left","Right") )
+#mutate condition to Orientation
+names(data)[names(data) == 'condition'] <- 'orientation'
+data <- data %>% mutate( orientation =ifelse(orientation==1, "Canonical","Inverted") )
+
+df<- data %>% dplyr::filter(subject>="AE",subject<="AG") #Includes one or two who fail the likelihood ratio test, for illustration
+
+condtnVariableNames <- c("subject","orientation", "stream") # 
+minSPE<- -17; maxSPE<- 17
+
+curves<- df %>% group_by_at(.vars = condtnVariableNames) %>% 
+  do(calc_curves_dataframe(.,minSPE,maxSPE,numItemsInStream))
+
+
+```

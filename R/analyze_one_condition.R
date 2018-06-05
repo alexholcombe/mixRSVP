@@ -93,7 +93,7 @@ analyzeOneConditionDF<- function(df, numItemsInStream, paramBounds, nReplicates=
   #To make into dataframe, can take only the first warning
   #And I think I have to change to string from possibly being simpleWarning object, otherwise I've gotten error:
   # "cannot coerce class "c("simpleWarning", "warning", "condition")" to a data.frame"
-  fitList$warnings <- toString( fitList$warnings[1] )
+  fitList$warnings <- fitList$warnings[1] #toString( fitList$warnings[1] )
 
   asDataFrame<- data.frame(fitList)
   #asDataFrame<- data.frame(efficay=fitList[1], latency=fitList[2], precision=fit[3], val=fit$value, warnings="None")

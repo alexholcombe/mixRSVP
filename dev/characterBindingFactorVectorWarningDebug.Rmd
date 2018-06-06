@@ -13,9 +13,12 @@ use_dev_version()
 
 * analyze_one_condition.R line 96
 
-### warning binding error
+### only issue remaining?
 
 binding character and factor vector, coercing into character vector
+
+### warning binding error, fixed
+
 
 
 At end when all getting bound together,

@@ -109,8 +109,8 @@ test_that("hybrid observer", {
   guesser <- df
   guesser$SPE <- guesses
 
-  #Create observer with lots of guesses
-  loser <- rbind(guesser)#,df)
+  #Create observer who guesses on every trial
+  loser <- guesser #rbind(guesser)#,df)
   #hist(loser$SPE, breaks=seq(minSPE,maxSPE,by=1))
 
   nGuessing<- -logLikGuessing(loser,numItemsInStream)
@@ -124,8 +124,8 @@ test_that("hybrid observer", {
 
   p <- likelihoodRatioTest(-nMixture,-nGuessing,3)
   #this example fails to reject the null, as it should because participant is pure guesser
-  #p-value should be essentially 1 because the data is from the reduced model (guessing)
-  expect_equal(p, .83, tolerance=1e-02)
+  #p-value should be bad because the data is from the reduced model (guessing)
+  expect_equal(p, .21, tolerance=1e-01)
 
   #ANOTHER TEST, of data that is not 100% guesses
 

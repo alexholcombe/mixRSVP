@@ -77,7 +77,7 @@ annotate_fit <- function(g,curvesDf) {
 
 #' Plot histogram with fitted curve
 #'
-#' @import ggplot2
+#' @import ggplot2 methods
 #'
 #' @param df A dataframe that must have fields targetSP and SPE
 #' @param annotateIt Add text to the plot indicating fit efficacy, latency, precision, and negative log likelihood

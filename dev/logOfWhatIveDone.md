@@ -29,4 +29,4 @@ NULL
 adding importFrom("methods", "show")
 importFrom("methods", "show")
 and ensure that your DESCRIPTION Imports field
-contains 'methods').
+contains 'methods').  Did that, as explained here to avoid error https://stackoverflow.com/questions/13085481/namespace-dependencies-not-required

@@ -96,19 +96,9 @@ analyzeOneConditionDF<- function(df, numItemsInStream, paramBounds, nReplicates=
   #Sometimes it's a list of warning, which you can't put into a data frame.
   #In that case just take the first.
   firstWarning<- fitList$warnings[1]
-  #But when it's an actual warning rather than null [[1]], it will have both a msg and a call field
-  if (typeof(firstWarning) == "list") {
-    msg<- firstWarning$message
-    call<- capture.output(  #the function call that caused the warning
-      print( firstWarning[[1]]$call ) #Because print has a method that formats it nicely
-    )
-    msgAndCall<- paste0("message= ",msg,", call= ",call)
-    fitList$warnings<- msgAndCall
-  }
-  else {
-    fitList$warnings <- firstWarning
-  }
-  #toString( fitList$warnings[1] )
+  #When it's an actual warning rather than null [[1]], it will have both a msg and a call field
+  theWarning<- warning_to_string(firstWarning)
+  fitList$warnings <- theWarning
 
   asDataFrame<- data.frame(fitList)
   #asDataFrame<- data.frame(efficay=fitList[1], latency=fitList[2], precision=fit[3], val=fit$value, warnings="None")

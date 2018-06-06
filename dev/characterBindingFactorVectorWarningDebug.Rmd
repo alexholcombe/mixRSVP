@@ -15,15 +15,18 @@ use_dev_version()
 
 ### warning binding error
 
- use_r('warningToString')
- 
+binding character and factor vector, coercing into character vector
+
+
 At end when all getting bound together,
 
 Error in bind_rows_(x, .id) : 
   Column `warnings` can't be converted from character to list
   
   All upper - lower must be >= 2*rhobeg. Changing rhobeg
-  
+
+Victory declared! The below now runs without error.
+
 ```{r}
 
 library(mixRSVP)

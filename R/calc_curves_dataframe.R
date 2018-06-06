@@ -48,34 +48,16 @@ calc_curves_dataframe<- function(df,minSPE,maxSPE,numItemsInStream) {
     curveDf$val <- estimate$val
   }
   if ( "warnings" %in% names(df) ) {
-    curveDf$warnings <- df$warnings[1]
-    print(paste('assigning warning from df',df$warnings[1],'which is type',typeof(df$warnings[1])))
+    theWarning<- warning_to_string(df$warnings[1])
+    curveDf$warnings <- theWarning
+    print('Ultimately assigned '); print(theWarning)
   } else if (estimateAvailable) {
     #Sometimes it's a list of warning, which you can't put into a data frame.
     #In that case just take the first.
     print(paste('assigning warning from estimate',estimate$warnings[1],'which is type',typeof(estimate$warnings[1])))
-    theWarning<- estimate$warnings[1]
-    #But when it's an actual warning rather than null [[1]], it will have both a msg and a call field
-    curveDf$warnings <- theWarning
-    if (typeof(theWarning) == "list") {
-      msg<- theWarning$message
-      call<- capture.output(  #the function call that caused the warning
-        print( theWarning[[1]]$call ) #Because print has a method that formats it nicely
-      )
-      if (length(call) > 1) {
-        call <- paste0(call,collapse='')
-      }
-      msgAndCall<- paste0("message= ",msg,", call= ",call)
-      curveDf$warnings<- msgAndCall
-    }
-    else {
-      curveDf$warnings <- theWarning
-    }
-    cat('Ultimately assigned ', curveDf$warnings)
-
-    if (typeof(estimate$warnings[1]) == "list") {
-      ww<<-estimate$warnings[1]
-    }
+    theWarning<- warning_to_string(estimate$warnings[1])
+    curveDf$warnings<- theWarning
+    print('Ultimately assigned '); print(theWarning)
   }
   if ( "pLRtest" %in% names(df) ) {
     curveDf$pLRtest <- df$pLRtest[1]

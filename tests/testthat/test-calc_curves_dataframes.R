@@ -1,6 +1,6 @@
 context("test-calc_curves_dataframe.R")
 
-#To testthat, run test_file("tests/testthat/test-calc_curves_dataframe.R")
+#To testthat, run test_file("tests/testthat/test-calc_curves_dataframes.R")
 
 #Read in some data to fit
 df<-readRDS( file.path("..","exampleSubject.Rdata") )
@@ -22,7 +22,7 @@ test_that("Performs with dplyr split-apply-recombining into dataframe", {
   numItemsInStream<-24
   minSPE<- -17; maxSPE<- 17
 
-  condtnVariableNames<-c("condition","target")
+  condtnVariableNames<-c("condition") #,"target")
   curves<- df %>% group_by_at(.vars = condtnVariableNames) %>%
     do(calc_curves_dataframe(.,minSPE,maxSPE,numItemsInStream))
 

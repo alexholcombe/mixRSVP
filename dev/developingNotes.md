@@ -16,7 +16,7 @@ in bind_rows_(x, .id) :
 Still getting this error e.g. in inspectHistograms.Rmd in jackie project. Do I have the latest version?  Because what is the relationship to the message given by analyze_experiment.Rmd: " Unequal factor levels: coercing to characterbinding ". I dimly remember that 
 "binding character and factor vector, coercing into character vector"
 
-
+"call" in simplewarning sometimes has two fucking parts!
 
 ### to-do
 

@@ -15,12 +15,14 @@ use_dev_version()
 
 ### warning binding error
 
- use_r('warningToString.R')
+ use_r('warningToString')
  
 At end when all getting bound together,
 
 Error in bind_rows_(x, .id) : 
   Column `warnings` can't be converted from character to list
+  
+  All upper - lower must be >= 2*rhobeg. Changing rhobeg
   
 ```{r}
 

@@ -50,14 +50,14 @@ calc_curves_dataframe<- function(df,minSPE,maxSPE,numItemsInStream) {
   if ( "warnings" %in% names(df) ) {
     theWarning<- warning_to_string(df$warnings[1])
     curveDf$warnings <- theWarning
-    print('Ultimately assigned '); print(theWarning)
+    #print('Ultimately assigned '); print(theWarning)
   } else if (estimateAvailable) {
     #Sometimes it's a list of warning, which you can't put into a data frame.
     #In that case just take the first.
-    print(paste('assigning warning from estimate',estimate$warnings[1],'which is type',typeof(estimate$warnings[1])))
+    #print(paste('assigning warning from estimate',estimate$warnings[1],'which is type',typeof(estimate$warnings[1])))
     theWarning<- warning_to_string(estimate$warnings[1])
     curveDf$warnings<- theWarning
-    print('Ultimately assigned '); print(theWarning)
+    #print('Ultimately assigned '); print(theWarning)
   }
   if ( "pLRtest" %in% names(df) ) {
     curveDf$pLRtest <- df$pLRtest[1]

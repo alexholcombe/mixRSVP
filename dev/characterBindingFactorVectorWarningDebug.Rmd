@@ -3,7 +3,7 @@ title: "characterBindingFactorVectorWarningDebug"
 author: "Alex Holcombe"
 output: html_document
 ---
-use_dev_version()
+use_dev_version() increments the version, after commits made
 
 ### Places where I mess with warnings
 

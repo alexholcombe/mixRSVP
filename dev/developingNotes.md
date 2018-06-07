@@ -3,22 +3,11 @@
 * I cast warnings as a character to fix a problem but side effect is getting these messages 
 "Unequal factor levels: coercing to characterbinding character and factor vector, coercing into character vectorbinding character and factor vector"
 
-This can be investigated in test_analyzeOneCondition's test "can combine results of analyzeOneConditionDf into dataframe"
-
-analyzeOneConditionDF turned warnings into a string.
-
-###   Column `warnings` can't be converted from character to list
-
-inside calc_curves_dataframe in test-calc_curves_dataframe
-in bind_rows_(x, .id) : 
-  Column `warnings` can't be converted from character to list
-  
-Still getting this error e.g. in inspectHistograms.Rmd in jackie project. Do I have the latest version?  Because what is the relationship to the message given by analyze_experiment.Rmd: " Unequal factor levels: coercing to characterbinding ". I dimly remember that 
-"binding character and factor vector, coercing into character vector"
-
-"call" in simplewarning sometimes has two fucking parts!
 
 ### to-do
+
+* [1] "Got NaN as a result of calling pnorm with: 1.5 -0.227865514090563 -4.05e-05"
+Why is pnorm being called with a negative sigma??
 
 * Create simplest possible vignette, to analyze just one condition. Basically filter data and then call analyzeOneCondition
 
@@ -71,3 +60,18 @@ Use RStudio->Build->Test or
 
 Damn you can't see the vignettes unless you install the proper package from tgz etc or
 https://stackoverflow.com/questions/33614660/knitr-rmd-vignettes-do-not-appear-with-vignette?rq=1
+
+This can be investigated in test_analyzeOneCondition's test "can combine results of analyzeOneConditionDf into dataframe"
+
+analyzeOneConditionDF turned warnings into a string.
+
+###   Column `warnings` can't be converted from character to list. Fixed
+
+inside calc_curves_dataframe in test-calc_curves_dataframe
+in bind_rows_(x, .id) : 
+  Column `warnings` can't be converted from character to list
+  
+Still getting this error e.g. in inspectHistograms.Rmd in jackie project. Do I have the latest version?  Because what is the relationship to the message given by analyze_experiment.Rmd: " Unequal factor levels: coercing to characterbinding ". I dimly remember that 
+"binding character and factor vector, coercing into character vector"
+
+"call" in simplewarning sometimes has two fucking parts!

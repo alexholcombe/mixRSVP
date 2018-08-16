@@ -42,6 +42,14 @@ Type `?mixRSVP` or `?<FUNCTIONNAME>` and look at the vignettes that show example
 ```{r vignettes, eval=FALSE}
 vignette(package='mixRSVP')
 ```
+## To-do
+
+Still get warnings indicating pnorm is called with negative sigma,
+"Got NaN as a result of calling pnorm with: 0.5 3.66418579969812 -9.1e-05"
+Don't know why because sigma given bounds that greater than zero. Maybe function fitter still goes outside the bounds slight, and tightening the bounds will fix this?
+
+Also get:
+"Error in eigen(nhatend) : infinite or missing values in 'x'"
 
 ## History
 

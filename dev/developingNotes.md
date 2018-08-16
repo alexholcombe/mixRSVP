@@ -8,6 +8,8 @@
 
 * [1] "Got NaN as a result of calling pnorm with: 1.5 -0.227865514090563 -4.05e-05"
 Why is pnorm being called with a negative sigma??
+Happens on line 51 or likelihood.R
+Need to find what is setting sigma to negative value.
 
 * Create simplest possible vignette, to analyze just one condition. Basically filter data and then call analyzeOneCondition
 

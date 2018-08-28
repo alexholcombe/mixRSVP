@@ -14,7 +14,7 @@ createGuessingDistribution <- function(minSPE,maxSPE,targetSP,numItemsInStream) 
   # provided on every trial. This isn't an actual uniform distribution because the most extreme errors are only
   # possible on trials in which targets appear at their most extreme positions.
   # minSPE and maxSPE is redundant with targetSP and numItemsInStream but saves calculation time.
-
+  if (any(is.na(targetSP))) stop("Don't send me NA or NaN in targetSP")
   if (minSPE > maxSPE) stop('minSPE must be less than or equal to maxSPE')
   #Check that targetSP and numItemsInStream doesn't imply SPEs that fall outside minSPE and maxSPE
   #(don't want to generate minSPE, maxSPE automatically yet because might need to use common scale with
@@ -23,8 +23,8 @@ createGuessingDistribution <- function(minSPE,maxSPE,targetSP,numItemsInStream) 
   maxTargetSP <- max(targetSP)
   minSPEthisData<- 1 - max(targetSP)
   maxSPEthisData<- numItemsInStream - min(targetSP)
-  if (maxSPEthisData > maxSPE) stop(cat("maxSPE must be at least",maxSPEthisData,"based on the values you passed me"))
-  if (minSPEthisData < minSPE) stop(cat("minSPE must be no greater than",minSPEthisData,"based on the values you passed me"))
+  if (maxSPEthisData > maxSPE) stop("maxSPE must be at least",maxSPEthisData,"based on the values you passed me")
+  if (minSPEthisData < minSPE) stop("minSPE must be no greater than",minSPEthisData,"based on the values you passed me")
 
   #For each targetSP, determine all possible SPEs and aggregate across all targetSPs to generate the guessing distribution
   xDomain<- minSPE:maxSPE

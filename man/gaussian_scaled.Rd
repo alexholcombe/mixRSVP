@@ -4,8 +4,8 @@
 \alias{gaussian_scaled}
 \title{Calculate the mixture model's Gaussian, scaled to the number of datapoints in the data}
 \usage{
-gaussian_scaled(efficacy, latency, precision, numObservations, minSPE, maxSPE,
-  grain)
+gaussian_scaled(efficacy, latency, precision, numObservations, minSPE,
+  maxSPE, grain)
 }
 \description{
 Used in plot_hist_with_fit etc.

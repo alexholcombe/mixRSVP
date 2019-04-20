@@ -2,7 +2,6 @@
 % Please edit documentation in R/plot_hist_with_fit.R, R/theme_apa.R
 \name{theme_apa}
 \alias{theme_apa}
-\alias{theme_apa}
 \title{APA compatible ggplot2 theme}
 \usage{
 theme_apa(base_size = 12, base_family = "", box = FALSE)

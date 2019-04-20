@@ -3,7 +3,6 @@
 \docType{data}
 \name{P2E2pilot}
 \alias{P2E2pilot}
-\alias{P2E2pilot}
 \title{Dual-RSVP data, with letters having random orientation on each frame}
 \format{A data frame with 1200 rows and 23 variables:
 \describe{

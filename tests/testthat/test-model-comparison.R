@@ -125,7 +125,7 @@ test_that("hybrid observer", {
   p <- likelihoodRatioTest(-nMixture,-nGuessing,3)
   #this example fails to reject the null, as it should because participant is pure guesser
   #p-value should be bad because the data is from the reduced model (guessing)
-  expect_equal(p, .21, tolerance=1e-01)
+  expect_equal(p, .833, tolerance=1e-01)
 
   #ANOTHER TEST, of data that is not 100% guesses
 

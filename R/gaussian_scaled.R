@@ -19,6 +19,15 @@ areaOfGaussianBin<- function(binStart,binWidth,latency,precision) {
 #'
 #' Used in plot_hist_with_fit etc.
 #'
+#'
+#' @param efficacy proportion of trials drawn from the gaussian distribution
+#' @param latency center of gaussian relative to SPE=0
+#' @param precision sigma of gaussian
+#' @param numObservations number of trials, to help scale height
+#' @param minSPE minimum possible serial position error
+#' @param maxSPE maximum possible serial position error
+#' @param grain how finely to plot gaussian over the histogram, scaling affected by grain
+#'
 #' @export
 #'
 #' @examples

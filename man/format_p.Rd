@@ -9,6 +9,8 @@ format_p(p, precision = 0.001)
 }
 \arguments{
 \item{p}{The p-value to format}
+
+\item{precision}{Indicate precision desired, e.g. with 0.001}
 }
 \value{
 a string

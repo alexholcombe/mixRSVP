@@ -2,6 +2,7 @@
 #' with < precision if small enough, otherwise = p
 #'
 #' @param p The p-value to format
+#' @param precision Indicate precision desired, e.g. with 0.001
 #' @return a string
 #' @export
 #'

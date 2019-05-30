@@ -77,3 +77,9 @@ Still getting this error e.g. in inspectHistograms.Rmd in jackie project. Do I h
 "binding character and factor vector, coercing into character vector"
 
 "call" in simplewarning sometimes has two fucking parts!
+
+### Vignettes
+
+For a long time the vignettes were lost no matter which RStudio build thing I ran. Until I did
+devtools::build_vignettes()
+devtools::load_all(".")

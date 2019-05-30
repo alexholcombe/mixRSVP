@@ -7,6 +7,21 @@
 gaussian_scaled(efficacy, latency, precision, numObservations, minSPE,
   maxSPE, grain)
 }
+\arguments{
+\item{efficacy}{proportion of trials drawn from the gaussian distribution}
+
+\item{latency}{center of gaussian relative to SPE=0}
+
+\item{precision}{sigma of gaussian}
+
+\item{numObservations}{number of trials, to help scale height}
+
+\item{minSPE}{minimum possible serial position error}
+
+\item{maxSPE}{maximum possible serial position error}
+
+\item{grain}{how finely to plot gaussian over the histogram, scaling affected by grain}
+}
 \description{
 Used in plot_hist_with_fit etc.
 }

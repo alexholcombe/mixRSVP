@@ -1,0 +1,24 @@
+---
+title: "understanding-latency"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{understanding-latency}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(mixRSVP)
+```
+
+Schematic to help understand what a latency of e.g. 0 really means.
+```{r pressure, echo=FALSE, fig.cap="A caption", out.width = '100%'}
+knitr::include_graphics("understandingLatency.png")
+```

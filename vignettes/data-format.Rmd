@@ -31,4 +31,4 @@ The dataframe should contain one trial for each row. The columns must include:
 
 ## Wrangling psychopy output
 
-Most of Alex's psychopy RSVP programs have two targets potentially, recorded on the same row of the psychopy data file. So, need to melt into separate rows, one for each target, while preserving trialnum. For an example, see 
+Most of Alex's psychopy RSVP programs have two targets potentially, recorded on the same row of the psychopy data file. So, need to melt into separate rows, one for each target, while preserving trialnum. For an example, see https://github.com/alexholcombe/wordsLettersRSVPhorizVert/blob/master/analysis/importMBLdata.Rmd

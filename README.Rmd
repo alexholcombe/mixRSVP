@@ -15,14 +15,16 @@ knitr::opts_chunk$set(
 # mixRSVP
 
 mixRSVP mixture models temporal errors in reports of an item from an array or a stream, presently using a mixture model of uniform and Gaussian distributions.
-[Here](https://alexholcombe.wordpress.com/2015/04/05/reporting-items-from-a-stream-and-mixture-modeling-to-reveal-buffering-and-a-bottleneck/) is an explanation of what the hell that means.
+[Here](https://alexholcombe.wordpress.com/2015/04/05/reporting-items-from-a-stream-and-mixture-modeling-to-reveal-buffering-and-a-bottleneck/) is an explanation of what that means.
 
 ## Installation
 
 ```{r install, eval=FALSE}
 install_packages('devtools')  #if you don't have devtools already
 library('devtools') 
-devtools::install_github('alexholcombe/mixRSVP',build_vignettes=TRUE)
+#devtools::install_github('alexholcombe/mixRSVP',build_vignettes=TRUE) #No longer works
+#Because of a change in devtools, you have to do this long command below to get the vignettes built
+devtools::install_github('alexholcombe/mixRSVP', build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 ## Example

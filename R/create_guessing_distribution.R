@@ -15,6 +15,7 @@ createGuessingDistribution <- function(minSPE,maxSPE,targetSP,numItemsInStream) 
   # possible on trials in which targets appear at their most extreme positions.
   # minSPE and maxSPE is redundant with targetSP and numItemsInStream but saves calculation time.
   if (any(is.na(targetSP))) stop("Don't send me NA or NaN in targetSP")
+  if (length(targetSP)==0) stop("Your targetSP list has length zero")
   if (minSPE > maxSPE) stop('minSPE must be less than or equal to maxSPE')
   #Check that targetSP and numItemsInStream doesn't imply SPEs that fall outside minSPE and maxSPE
   #(don't want to generate minSPE, maxSPE automatically yet because might need to use common scale with

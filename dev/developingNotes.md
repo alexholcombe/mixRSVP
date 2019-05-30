@@ -83,3 +83,7 @@ Still getting this error e.g. in inspectHistograms.Rmd in jackie project. Do I h
 For a long time the vignettes were lost no matter which RStudio build thing I ran. Until I did
 devtools::build_vignettes()
 devtools::load_all(".")
+
+Then I build source package in case that's needed to install from GitHub, but it doesn't work. Turns out a further complication is that build_vignettes is no longer an option in install_github, instead you have to do:
+devtools::install_github('alexholcombe/mixRSVP', build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
+This does not include the option of not building the vignettes, so it results in building the vignettes.

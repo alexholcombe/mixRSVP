@@ -18,17 +18,17 @@ knitr::opts_chunk$set(
 library(mixRSVP)
 ```
 
-## What you need to know about your data set
+## Global characteristics of your data set that must be assigned to a variable
 
 The variable "numItemsInStream" must be set - the number of items in the stream (must be the same on each trial). This variable will be passed to all the modeling functions.
 
-
 ## Specific to each trial
 
-The dataframe should contain one trial for each row.
+The dataframe should contain one trial for each row. The columns must include:
+
 * $targetSP, the serial position of the target on that trial
 * $SPE, the serial position error
 
 ## Wrangling psychopy output
 
-Most of Alex's psychopy RSVP programs have two targets potentially, recorded on the same row of the psychopy data file. So, need to melt into separate rows while preserving trialnum.
+Most of Alex's psychopy RSVP programs have two targets potentially, recorded on the same row of the psychopy data file. So, need to melt into separate rows, one for each target, while preserving trialnum. For an example, see 

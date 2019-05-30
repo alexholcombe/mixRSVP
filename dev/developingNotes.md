@@ -87,3 +87,5 @@ devtools::load_all(".")
 Then I build source package in case that's needed to install from GitHub, but it doesn't work. Turns out a further complication is that build_vignettes is no longer an option in install_github, instead you have to do:
 devtools::install_github('alexholcombe/mixRSVP', build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
 This does not include the option of not building the vignettes, so it results in building the vignettes.
+
+For adding an image for a vignette, it [should also be](https://stackoverflow.com/questions/32287633/which-is-the-correct-folder-to-store-images-used-in-vignettes-for-r-packages) in the vignette source directory

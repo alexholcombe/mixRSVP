@@ -15,6 +15,7 @@ Imports:
     signal,
     stats,
     assertthat,
+    minqa,
     methods
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
